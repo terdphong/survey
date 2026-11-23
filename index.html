@@ -1,0 +1,2930 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบประเมินความพึงพอใจ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-grad: linear-gradient(135deg, #2563eb 0%, #4f46e5 55%, #7c3aed 100%);
+      --emerald-grad: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+      --amber-grad: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
+      --bg-page: #f1f5f9;
+      --card-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      --border-soft: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Sarabun', 'Prompt', sans-serif;
+      background: var(--bg-page);
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1, h2, h3, h4, h5, .font-prompt {
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+    }
+
+    /* Top App Header */
+    .app-topbar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #312e81 60%, #4338ca 100%);
+      color: #fff;
+      padding: 14px 0;
+      box-shadow: 0 4px 18px rgba(30, 58, 138, 0.25);
+      position: sticky;
+      top: 0;
+      z-index: 1020;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      backdrop-filter: blur(6px);
+    }
+
+    /* 3 Module Navigation Pills */
+    .nav-module-wrap {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 10px 0;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
+
+    .module-pill {
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-weight: 600;
+      font-family: 'Prompt', sans-serif;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .module-pill:hover {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      color: #3730a3;
+    }
+
+    .module-pill .num-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #cbd5e1;
+      color: #fff;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .module-pill.active-form {
+      background: var(--primary-grad);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+    .module-pill.active-form .num-badge { background: rgba(255,255,255,0.28); }
+
+    .module-pill.active-dash {
+      background: var(--emerald-grad);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+    .module-pill.active-dash .num-badge { background: rgba(255,255,255,0.28); }
+
+    .module-pill.active-mgr {
+      background: var(--amber-grad);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+    }
+    .module-pill.active-mgr .num-badge { background: rgba(255,255,255,0.28); }
+
+    /* Form View */
+    .form-container {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .form-hero-card {
+      background: var(--primary-grad);
+      color: #fff;
+      border-radius: 18px;
+      padding: 26px 28px;
+      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.24);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-hero-card::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      top: -60px;
+      right: -50px;
+      pointer-events: none;
+    }
+
+    .hero-meta-pill {
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(4px);
+    }
+
+    .section-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--card-shadow);
+      padding: 22px 24px;
+      margin-top: 18px;
+    }
+
+    .section-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-num-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    /* Radio & Checkbox Choice Cards */
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .choice-tile {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 11px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.16s ease;
+      background: #fff;
+      user-select: none;
+    }
+
+    .choice-tile:hover {
+      border-color: #93c5fd;
+      background: #f8fafc;
+    }
+
+    .choice-tile.selected {
+      border-color: #4f46e5;
+      background: #eef2ff;
+      color: #312e81;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.12);
+    }
+
+    /* Likert Scale 5 Buttons */
+    .scale-row {
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .scale-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .scale-options {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .scale-btn {
+      border: 1.5px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 10px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .scale-btn:hover {
+      border-color: #93c5fd;
+      background: #eff6ff;
+    }
+
+    .scale-btn .score-num {
+      font-family: 'Prompt', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .scale-btn .score-lbl {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    .scale-btn.selected {
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      border-color: transparent;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    }
+    .scale-btn.selected .score-lbl { color: rgba(255,255,255,0.92); }
+
+    /* Responsive Layout for All Devices (Mobile, Tablet, Desktop) */
+    @media (max-width: 768px) {
+      .app-topbar { padding: 10px 0; }
+      .app-topbar .container { gap: 8px; }
+      .brand-icon { width: 38px; height: 38px; font-size: 1.2rem; border-radius: 10px; }
+      #sysTitleHeader { font-size: 1.05rem !important; }
+      #sysSchoolHeader { font-size: 0.78rem !important; }
+      .topbar-actions { width: 100%; margin-top: 2px; }
+      .topbar-actions .input-group { max-width: 100% !important; width: 100% !important; }
+      .nav-module-wrap { padding: 6px 0; }
+      .nav-module-wrap .container { overflow-x: auto; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+      .module-pill { padding: 7px 14px; font-size: 0.88rem; white-space: nowrap; flex-shrink: 0; }
+      .module-pill .num-badge { width: 22px; height: 22px; font-size: 0.75rem; }
+      .form-container { padding-left: 8px; padding-right: 8px; }
+      .form-hero-card { padding: 20px 18px; border-radius: 16px; }
+      #formHeroTitle { font-size: 1.35rem !important; }
+      .section-card { padding: 18px 16px; border-radius: 16px; margin-top: 14px; }
+      .section-header-badge h6 { font-size: 1.05rem; }
+      .choice-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+      .choice-tile { padding: 10px 12px; font-size: 0.95rem; min-height: 44px; }
+      .kpi-card { padding: 14px 16px; }
+      .kpi-num { font-size: 1.6rem; }
+    }
+
+    @media (max-width: 576px) {
+      .app-topbar { padding: 8px 0; }
+      .brand-icon { width: 34px; height: 34px; font-size: 1.1rem; border-radius: 8px; }
+      #sysTitleHeader { font-size: 0.96rem !important; }
+      #sysSchoolHeader { font-size: 0.72rem !important; }
+      .module-pill { padding: 6px 12px; font-size: 0.82rem; }
+      .module-pill .num-badge { width: 18px; height: 18px; font-size: 0.7rem; }
+      .form-container { padding-left: 4px; padding-right: 4px; }
+      .form-hero-card { padding: 16px 14px; border-radius: 14px; }
+      #formHeroTitle { font-size: 1.2rem !important; line-height: 1.3; }
+      .hero-meta-pill { font-size: 0.78rem; padding: 4px 8px; }
+      .section-card { padding: 14px 12px; border-radius: 14px; margin-top: 12px; }
+      .section-header-badge { gap: 8px; margin-bottom: 12px; }
+      .section-header-badge h6 { font-size: 0.98rem; }
+      .section-num-circle { width: 24px; height: 24px; font-size: 0.8rem; border-radius: 6px; }
+      .choice-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .choice-tile { padding: 9px 10px; font-size: 0.9rem; min-height: 44px; }
+      .scale-options { gap: 4px; margin-top: 8px; }
+      .scale-btn { padding: 8px 1px; min-height: 52px; border-radius: 10px; touch-action: manipulation; }
+      .scale-btn .score-num { font-size: 1.1rem; }
+      .scale-btn .score-lbl { font-size: 0.65rem; line-height: 1.1; word-break: keep-all; }
+      .scale-row { padding: 10px 0; }
+      .scale-row .fw-semibold { font-size: 0.95rem; }
+      .form-control, .form-select { font-size: 16px !important; } /* Prevent iOS Safari auto-zoom */
+      #btnSubmitEval { font-size: 1rem; padding: 12px 16px; }
+      .kpi-card { padding: 12px 10px; border-radius: 12px; }
+      .kpi-label { font-size: 0.8rem; margin-bottom: 2px; }
+      .kpi-num { font-size: 1.4rem; }
+      .kpi-sub { font-size: 0.75rem; }
+    }
+
+    /* Dashboard KPI Cards */
+    .kpi-card {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--card-shadow);
+      padding: 18px 20px;
+      height: 100%;
+      transition: transform 0.15s ease;
+    }
+    .kpi-card:hover { transform: translateY(-2px); }
+    .kpi-label {
+      font-size: 0.9rem;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .kpi-num {
+      font-family: 'Prompt', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .kpi-sub {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .dash-panel {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: var(--card-shadow);
+      padding: 20px;
+      height: 100%;
+    }
+
+    /* Question Manager Cards */
+    .q-manager-card {
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.15s ease;
+    }
+    .q-manager-card:hover { border-color: #cbd5e1; }
+    .q-manager-card.inactive { opacity: 0.6; background: #f8fafc; }
+
+    .reorder-col {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .btn-order {
+      width: 28px;
+      height: 24px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      color: #475569;
+      font-size: 0.72rem;
+    }
+    .btn-order:hover:not(:disabled) { background: #e2e8f0; color: #0f172a; }
+    .btn-order:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .badge-type {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      font-weight: 600;
+    }
+    .badge-req {
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+    .badge-opt {
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .badge-cat {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    /* Custom Switch */
+    .form-switch .form-check-input {
+      width: 2.75em;
+      height: 1.45em;
+      cursor: pointer;
+    }
+    .form-switch .form-check-input:checked {
+      background-color: #10b981;
+      border-color: #10b981;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(2px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .loading-box {
+      background: #fff;
+      padding: 24px 32px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    .table-stat th {
+      background: #f8fafc;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #334155;
+      white-space: nowrap;
+    }
+
+    .level-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    .level-5 { background: #d1fae5; color: #065f46; }
+    .level-4 { background: #dbeafe; color: #1e40af; }
+    .level-3 { background: #fef3c7; color: #92400e; }
+    .level-2 { background: #ffedd5; color: #9a3412; }
+    .level-1 { background: #fee2e2; color: #991b1b; }
+
+    /* Google Forms Authentic Theme Mode */
+    body.gf-bg-mode {
+      background: #e1efea;
+    }
+    .gf-wrapper {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+    .gf-banner-card {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #dadce0;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .gf-banner-card img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .gf-title-card {
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-top: 10px solid #008865;
+      border-radius: 8px;
+      padding: 22px 24px 16px 24px;
+      margin-bottom: 12px;
+    }
+    .gf-title-text {
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: #202124;
+      line-height: 1.35;
+      margin-bottom: 10px;
+    }
+    .gf-desc-text {
+      font-size: 0.96rem;
+      color: #202124;
+      white-space: pre-line;
+      line-height: 1.55;
+    }
+    .gf-req-note {
+      border-top: 1px solid #dadce0;
+      margin-top: 14px;
+      padding-top: 10px;
+      font-size: 0.88rem;
+      color: #d93025;
+    }
+    .gf-section-card {
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .gf-section-head {
+      background: #399375;
+      color: #fff;
+      padding: 12px 24px;
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+    .gf-section-body {
+      padding: 14px 24px;
+      font-size: 0.96rem;
+      color: #202124;
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+    .gf-subheading-card {
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 16px 24px;
+      margin-bottom: 12px;
+      font-family: 'Prompt', 'Sarabun', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: #202124;
+      text-decoration: underline;
+    }
+    .gf-q-card {
+      background: #fff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 22px 24px;
+      margin-bottom: 12px;
+    }
+    .gf-q-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #202124;
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+    .gf-underline-input {
+      width: 100%;
+      max-width: 360px;
+      border: none;
+      border-bottom: 1px solid #dadce0;
+      padding: 6px 2px;
+      font-size: 0.96rem;
+      color: #202124;
+      outline: none;
+      transition: border-color 0.2s;
+      background: transparent;
+    }
+    .gf-underline-input.wide { max-width: 100%; }
+    .gf-underline-input:focus {
+      border-bottom: 2px solid #008865;
+    }
+    .gf-radio-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gf-radio-opt {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      padding: 4px 0;
+      font-size: 0.96rem;
+      color: #202124;
+      user-select: none;
+    }
+    .gf-radio-circle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #5f6368;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.15s;
+    }
+    .gf-radio-opt.selected .gf-radio-circle {
+      border-color: #008865;
+    }
+    .gf-radio-opt.selected .gf-radio-circle::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #008865;
+    }
+    .gf-scale-grid {
+      display: grid;
+      grid-template-columns: auto repeat(5, minmax(36px, 56px)) auto;
+      align-items: center;
+      justify-content: center;
+      gap: 8px 6px;
+      text-align: center;
+      padding: 8px 0 4px 0;
+    }
+    .gf-scale-anchor {
+      font-size: 0.88rem;
+      color: #202124;
+      padding: 0 6px;
+      white-space: nowrap;
+    }
+    .gf-scale-num {
+      font-size: 0.9rem;
+      color: #202124;
+      margin-bottom: 6px;
+    }
+    .gf-scale-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #5f6368;
+      margin: 0 auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .gf-scale-dot:hover { border-color: #008865; background: rgba(0, 136, 101, 0.08); }
+    .gf-scale-dot.selected { border-color: #008865; }
+    .gf-scale-dot.selected::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #008865;
+    }
+    @media (max-width: 576px) {
+      .gf-scale-grid {
+        grid-template-columns: 1fr;
+        text-align: left;
+      }
+    }
+    .gf-nav-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      gap: 10px;
+    }
+    .gf-btn-nav {
+      background: #fff;
+      color: #008865;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      padding: 8px 24px;
+      font-weight: 600;
+      font-size: 0.94rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      cursor: pointer;
+    }
+    .gf-btn-nav:hover { background: #f8faf9; }
+    .gf-btn-submit {
+      background: #008865;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 9px 26px;
+      font-weight: 600;
+      font-size: 0.94rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.16);
+      cursor: pointer;
+    }
+    .gf-btn-submit:hover { background: #007354; }
+    .gf-btn-clear {
+      background: transparent;
+      border: none;
+      color: #008865;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-box">
+      <div class="spinner-border text-primary mb-2" role="status" style="width:2.5rem;height:2.5rem;"></div>
+      <div id="loadingText" class="fw-semibold text-dark">กำลังโหลดข้อมูล...</div>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="app-topbar">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="d-flex align-items-center gap-3">
+        <div id="sysLogoBox" class="brand-icon overflow-hidden"><i class="bi bi-clipboard2-check-fill"></i></div>
+        <div>
+          <div id="sysTitleHeader" class="fw-bold fs-5 font-prompt lh-sm">ระบบประเมินความพึงพอใจ</div>
+          <div id="sysSchoolHeader" class="small text-white-50">โรงเรียนบางปลาม้า “สูงสุมารผดุงวิทย์”</div>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <div class="input-group input-group-sm" style="min-width: 240px;">
+          <span class="input-group-text bg-white bg-opacity-25 text-white border-0"><i class="bi bi-file-earmark-text"></i></span>
+          <select id="globalFormSelect" class="form-select border-0 fw-semibold" onchange="onGlobalFormChange(this.value)">
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3 Module Pills -->
+  <nav class="nav-module-wrap">
+    <div class="container d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <div class="d-flex flex-wrap gap-2">
+        <button id="tabBtnForm" class="module-pill active-form" onclick="switchTab('form')">
+          <span class="num-badge">1</span> ฟอร์ม (Form)
+        </button>
+        <button id="tabBtnDash" class="module-pill" onclick="switchTab('dash')">
+          <span class="num-badge">2</span> Dashboard (สรุปผล)
+        </button>
+        <button id="tabBtnMgr" class="module-pill" onclick="switchTab('mgr')">
+          <span class="num-badge">3</span> จัดการคำถาม (Question Manager)
+          <i id="mgrLockIcon" class="bi bi-lock-fill ms-1 small"></i>
+        </button>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openShareModal()">
+          <i class="bi bi-qr-code me-1"></i> แชร์ลิงก์ / QR
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container py-4 flex-grow-1">
+
+    <!-- ==================== TAB 1: FORM ==================== -->
+    <section id="viewForm" class="form-container">
+      <div id="formClosedBanner" class="alert alert-warning d-none rounded-4 shadow-sm">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <strong>แบบประเมินนี้ปิดรับคำตอบชั่วคราว</strong> ท่านยังสามารถดูผลสรุปในหน้า Dashboard ได้
+      </div>
+
+      <!-- Modern Form Hero Card -->
+      <div id="modernHeroCard" class="form-hero-card mb-3">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+          <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-2 fw-normal">
+            <i class="bi bi-check-circle-fill me-1"></i> แบบประเมินความพึงพอใจ
+          </span>
+          <span id="formStatusBadge" class="badge bg-success rounded-pill px-3 py-2">เปิดรับคำตอบ</span>
+        </div>
+        <h2 id="formHeroTitle" class="fw-bold mb-1">-</h2>
+        <div id="formHeroSubtitle" class="text-white-50 mb-3">-</div>
+        <div class="d-flex flex-wrap gap-2">
+          <div id="formHeroDateWrap" class="hero-meta-pill"><i class="bi bi-calendar3"></i> <span id="formHeroDate">-</span></div>
+          <div id="formHeroLocWrap" class="hero-meta-pill"><i class="bi bi-geo-alt-fill"></i> <span id="formHeroLocation">-</span></div>
+        </div>
+      </div>
+
+      <!-- Dynamic Form Sections -->
+      <form id="evaluationForm" onsubmit="handleFormSubmit(event)">
+        <div id="dynamicFormBody"></div>
+
+        <div id="formSubmitWrap" class="mt-4 d-grid">
+          <button id="btnSubmitEval" type="submit" class="btn btn-primary btn-lg rounded-4 py-3 fw-bold shadow" style="background: var(--primary-grad); border:none;">
+            <i class="bi bi-send-check-fill me-2"></i> ส่งแบบประเมินความพึงพอใจ
+          </button>
+        </div>
+      </form>
+
+      <!-- Thank You Card -->
+      <div id="formSuccessCard" class="section-card text-center py-5 d-none">
+        <div class="mb-3">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success bg-opacity-10 text-success" style="width:78px;height:78px;font-size:2.6rem;">
+            <i class="bi bi-check-circle-fill"></i>
+          </span>
+        </div>
+        <h3 class="fw-bold text-success mb-2">บันทึกผลการประเมินเรียบร้อยแล้ว!</h3>
+        <p class="text-muted mb-4">ขอขอบคุณที่สละเวลาร่วมประเมินความพึงพอใจ ข้อมูลของท่านมีคุณค่าต่อการพัฒนาต่อไป</p>
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+          <button class="btn btn-primary rounded-pill px-4" onclick="resetPublicForm()">
+            <i class="bi bi-arrow-repeat me-1"></i> ทำแบบประเมินอีกครั้ง
+          </button>
+          <button class="btn btn-outline-success rounded-pill px-4" onclick="switchTab('dash')">
+            <i class="bi bi-bar-chart-fill me-1"></i> ดูผลสรุป (Dashboard)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: DASHBOARD ==================== -->
+    <section id="viewDash" class="d-none">
+      <!-- Toolbar -->
+      <div class="dash-panel mb-3 py-3">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <div>
+            <h5 class="fw-bold mb-0"><i class="bi bi-speedometer2 text-success me-2"></i>Dashboard สรุปผลการประเมิน: <span id="dashFormTitle" class="text-primary">-</span></h5>
+            <small class="text-muted">วิเคราะห์สถิติอัตโนมัติ (ค่าเฉลี่ย, S.D., การกระจาย CV%) แบบเรียลไทม์</small>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadDashboard()">
+              <i class="bi bi-arrow-clockwise me-1"></i> รีเฟรช
+            </button>
+            <button class="btn btn-sm btn-success rounded-pill px-3" onclick="exportExcelClient()">
+              <i class="bi bi-file-earmark-excel-fill me-1"></i> Export Excel
+            </button>
+            <button class="btn btn-sm btn-danger rounded-pill px-3" onclick="exportPdfServer()">
+              <i class="bi bi-file-earmark-pdf-fill me-1"></i> Export PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Cross Filters -->
+        <div id="dashFilterBar" class="row g-2 mt-2 pt-2 border-top align-items-center d-none">
+        </div>
+      </div>
+
+      <!-- 4 KPI Cards -->
+      <div class="row g-3 mb-3">
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">ผู้ตอบแบบประเมิน</div>
+            <div class="kpi-num" style="color:#4f46e5;"><span id="kpiTotal">0</span> <span class="fs-5 fw-semibold text-muted">คน</span></div>
+            <div class="kpi-sub" id="kpiTotalSub">จากทั้งหมด 0 รายการ</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">ค่าเฉลี่ยภาพรวม</div>
+            <div class="kpi-num text-success"><span id="kpiMean">0.00</span> <span class="fs-5 fw-semibold text-muted">จาก 5</span></div>
+            <div class="kpi-sub">S.D. = <span id="kpiSD">0.00</span></div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">ระดับความพึงพอใจ</div>
+            <div class="kpi-num text-success" id="kpiLevel">-</div>
+            <div class="kpi-sub">เกณฑ์มาตรฐาน 5 ระดับ</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">การกระจาย (CV)</div>
+            <div class="kpi-num text-dark"><span id="kpiCV">0.0</span> <span class="fs-5 fw-semibold text-muted">%</span></div>
+            <div class="kpi-sub" id="kpiCVSub">ความแปรปรวนสัมพัทธ์</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Demographics Charts -->
+      <div class="mb-3">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <span class="section-num-circle">1</span>
+          <h6 class="fw-bold mb-0">ข้อมูลส่วนตัวของผู้ตอบแบบประเมิน</h6>
+        </div>
+        <div id="dashDemoGrid" class="row g-3"></div>
+      </div>
+
+      <!-- Satisfaction Chart + Table -->
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <div class="dash-panel">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <span class="section-num-circle" style="background:#059669;">2</span>
+                <h6 class="fw-bold mb-0">กราฟเปรียบเทียบค่าเฉลี่ยความพึงพอใจรายข้อ</h6>
+              </div>
+              <span class="badge bg-light text-dark border">คะแนนเต็ม 5.00</span>
+            </div>
+            <div style="position:relative; min-height:260px;">
+              <canvas id="scaleBarChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Statistics Table -->
+      <div class="dash-panel mb-3">
+        <h6 class="fw-bold mb-3"><i class="bi bi-table text-primary me-2"></i>ตารางสรุปผลสถิติรายด้านและรายข้อ</h6>
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle table-stat mb-0">
+            <thead>
+              <tr>
+                <th class="text-center" style="width:45px;">ข้อ</th>
+                <th>รายการประเมิน</th>
+                <th class="text-center" style="width:60px;">n</th>
+                <th class="text-center" style="width:85px;">ค่าเฉลี่ย (x̄)</th>
+                <th class="text-center" style="width:75px;">S.D.</th>
+                <th class="text-center" style="width:80px;">CV (%)</th>
+                <th class="text-center" style="width:110px;">ระดับ</th>
+                <th style="min-width:170px;">สัดส่วนคะแนน (5→1)</th>
+              </tr>
+            </thead>
+            <tbody id="dashStatTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Open-ended Comments -->
+      <div class="dash-panel">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <span class="section-num-circle" style="background:#7c3aed;">3</span>
+          <h6 class="fw-bold mb-0">ข้อเสนอแนะเพิ่มเติม</h6>
+        </div>
+        <div id="dashCommentsList"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: QUESTION MANAGER ==================== -->
+    <section id="viewMgr" class="d-none">
+      <!-- Form Settings Card -->
+      <div class="dash-panel mb-3">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <span class="section-num-circle" style="background:#ea580c;">3</span>
+            <div>
+              <h5 class="fw-bold mb-0">จัดการแบบประเมินและคำถาม (Question Manager)</h5>
+              <small class="text-muted">สร้างแบบประเมินใหม่ แก้ไขหัวข้อ และจัดลำดับคำถาม</small>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button class="btn btn-sm btn-primary rounded-pill px-3" onclick="openFormModal(true)">
+              <i class="bi bi-plus-circle-fill me-1"></i> สร้างแบบประเมินใหม่
+            </button>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openFormModal(false)">
+              <i class="bi bi-pencil-square me-1"></i> แก้ไขหัวข้อฟอร์มนี้
+            </button>
+            <div class="dropdown">
+              <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="bi bi-gear-fill me-1"></i> เครื่องมือข้อมูล
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow">
+                <li><a class="dropdown-item" href="#" onclick="exportDriveSheet(); return false;"><i class="bi bi-google me-2 text-success"></i>ส่งออก Google Sheets ลง Drive</a></li>
+                <li><a class="dropdown-item" href="#" onclick="seedSampleData(); return false;"><i class="bi bi-database-add me-2 text-primary"></i>สร้างข้อมูลจำลอง 20 รายการ</a></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="clearResponses(); return false;"><i class="bi bi-trash3 me-2"></i>ล้างคำตอบของฟอร์มนี้ทั้งหมด</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" onclick="openSysConfigModal(); return false;"><i class="bi bi-shield-lock me-2 text-warning"></i>ตั้งค่าระบบ / เปลี่ยนรหัสผ่าน</a></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="deleteCurrentForm(); return false;"><i class="bi bi-x-circle me-2"></i>ลบแบบประเมินนี้</a></li>
+                <li><a class="dropdown-item" href="#" onclick="lockAdmin(); return false;"><i class="bi bi-lock me-2"></i>ล็อกสิทธิ์ผู้ดูแล</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Form Summary Strip -->
+        <div class="p-3 rounded-3 bg-light border d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <div>
+            <div class="fw-bold text-dark">
+              <span id="mgrFormTitle">-</span>
+              <span id="mgrFormStatusBadge" class="badge bg-success ms-1">OPEN</span>
+              <span id="mgrDefaultBadge" class="badge bg-primary ms-1 d-none"><i class="bi bi-star-fill me-1"></i>หน้าเริ่มต้น</span>
+            </div>
+            <div class="small text-muted">
+              <span id="mgrFormSubtitle">-</span> | <span id="mgrFormDate">-</span> | <span id="mgrFormLocation">-</span>
+            </div>
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <button id="btnSetDefaultForm" class="btn btn-outline-success fw-semibold px-3" onclick="setAsDefaultForm()">
+              <i class="bi bi-star me-1"></i> ตั้งเป็นหน้าเริ่มต้น
+            </button>
+            <button class="btn btn-light border fw-semibold px-3" onclick="openTemplateModal()">
+              <i class="bi bi-clipboard2-plus me-1 text-primary"></i> Template
+            </button>
+            <button class="btn btn-primary fw-semibold px-3" onclick="openQuestionModal(null)" style="background: var(--primary-grad); border:none;">
+              <i class="bi bi-plus-lg me-1"></i> เพิ่มคำถาม
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question Cards List -->
+      <div id="mgrQuestionList"></div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-top py-3 mt-4 text-center text-muted small">
+    <div class="container">
+      พัฒนาและดูแลระบบโดย <strong>นายเทิดพงศ์ พิกุลทอง</strong> ครูโรงเรียนบางปลาม้า "สูงสุมารผดุงวิทย์"
+    </div>
+  </footer>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- Modal: Admin Passcode -->
+  <div class="modal fade" id="adminAuthModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h6 class="modal-title fw-bold"><i class="bi bi-shield-lock-fill text-warning me-2"></i>ยืนยันสิทธิ์ผู้ดูแลระบบ</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form onsubmit="submitAdminPasscode(event)">
+          <div class="modal-body">
+            <label class="form-label small text-muted">กรุณากรอกรหัสผ่านผู้ดูแล (Admin Passcode)</label>
+            <input type="password" id="adminPasscodeInput" class="form-control form-control-lg text-center fw-bold" placeholder="••••" required autofocus>
+            <div id="adminAuthError" class="text-danger small mt-2 d-none"></div>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="submit" class="btn btn-primary w-100 rounded-pill fw-semibold">เข้าสู่ระบบจัดการ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Form Create / Edit -->
+  <div class="modal fade" id="formMetaModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold" id="formMetaModalTitle">แก้ไขข้อมูลแบบประเมิน</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form onsubmit="saveFormMetaSubmit(event)">
+          <div class="modal-body">
+            <input type="hidden" id="fmFormId">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">ชื่อกิจกรรม / ชื่อแบบประเมิน <span class="text-danger">*</span></label>
+              <input type="text" id="fmTitle" class="form-control" required placeholder="เช่น ค่ายคณิตศาสตร์">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">ผู้จัด / คำอธิบายย่อย</label>
+              <input type="text" id="fmSubtitle" class="form-control" placeholder="เช่น จัดโดย กลุ่มสาระการเรียนรู้คณิตศาสตร์">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold">วันที่จัดกิจกรรม</label>
+                <input type="text" id="fmDateText" class="form-control" placeholder="เช่น 5 - 7 มิถุนายน 2569">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">สถานที่</label>
+                <input type="text" id="fmLocation" class="form-control" placeholder="เช่น โรงเรียนบางปลาม้า “สูงสุมารผดุงวิทย์”">
+              </div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-6">
+                <label class="form-label fw-semibold">สถานะแบบประเมิน</label>
+                <select id="fmStatus" class="form-select">
+                  <option value="OPEN">เปิดรับคำตอบ (OPEN)</option>
+                  <option value="CLOSED">ปิดรับคำตอบ (CLOSED)</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-semibold">รูปแบบหน้าฟอร์ม (Theme)</label>
+                <select id="fmStyle" class="form-select">
+                  <option value="modern">Modern Card (หน้าเดียว)</option>
+                  <option value="googleform">Google Forms (แบ่งส่วน/สีเขียว)</option>
+                </select>
+              </div>
+            </div>
+            <div id="fmTemplateWrap" class="mb-2 d-none">
+              <label class="form-label fw-semibold">เริ่มต้นด้วยชุดคำถามแม่แบบ</label>
+              <select id="fmTemplateKey" class="form-select">
+                <option value="volunteer" selected>แบบประเมินกิจกรรมค่ายพัฒนาคุณธรรม จริยธรรม และจิตอาสา (12 ข้อ)</option>
+                <option value="openhouse">แบบประเมินเปิดบ้านสานฝัน (Open House 3 ส่วน)</option>
+                <option value="camp">แบบประเมินค่าย / อบรม / สัมมนา</option>
+                <option value="project">แบบประเมินโครงการสถานศึกษา</option>
+                <option value="teaching">แบบประเมินการจัดการเรียนการสอน</option>
+                <option value="service">แบบประเมินความพึงพอใจการให้บริการ</option>
+                <option value="">ฟอร์มเปล่า (เพิ่มคำถามเอง)</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึก</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Question Create / Edit -->
+  <div class="modal fade" id="questionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold" id="questionModalTitle">เพิ่มคำถามใหม่</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form onsubmit="saveQuestionSubmit(event)">
+          <div class="modal-body">
+            <input type="hidden" id="qmId">
+            <input type="hidden" id="qmOrder">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">ข้อความคำถาม <span class="text-danger">*</span></label>
+              <input type="text" id="qmText" class="form-control" required placeholder="เช่น รูปแบบกิจกรรมมีความเหมาะสมและน่าสนใจ">
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">ประเภทคำถาม</label>
+                <select id="qmType" class="form-select" onchange="onQuestionTypeChange()">
+                  <option value="scale5">มาตราส่วน 5 ระดับ (scale5)</option>
+                  <option value="radio">เลือกตอบ 1 ข้อ (radio)</option>
+                  <option value="select">เมนูตัวเลือก Dropdown (select)</option>
+                  <option value="checkbox">เลือกตอบหลายข้อ (checkbox)</option>
+                  <option value="shorttext">ข้อความสั้น (shorttext)</option>
+                  <option value="email">อีเมล (email)</option>
+                  <option value="text">ย่อหน้า/ข้อเสนอแนะ (text)</option>
+                  <option value="image">รูปภาพประกอบ (image)</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">หมวดหมู่ / ส่วน</label>
+                <input type="text" id="qmCategory" class="form-control" list="categorySuggestions" placeholder="เช่น ความพึงพอใจ - ด้านการจัดกิจกรรม">
+                <datalist id="categorySuggestions">
+                  <option value="ข้อมูลส่วนตัว">
+                  <option value="ความพึงพอใจ - ด้านการจัดกิจกรรม">
+                  <option value="ความพึงพอใจ - ด้านสถานที่และสิ่งอำนวยความสะดวก">
+                  <option value="ความพึงพอใจ - ด้านวิทยากรและความรู้ที่ได้รับ">
+                  <option value="ข้อเสนอแนะ">
+                </datalist>
+              </div>
+            </div>
+            <div id="qmOptionsWrap" class="mb-3 d-none">
+              <label class="form-label fw-semibold">ตัวเลือกคำตอบ (1 บรรทัด ต่อ 1 ตัวเลือก)</label>
+              <textarea id="qmOptions" class="form-control" rows="4" placeholder="ชาย&#10;หญิง&#10;ไม่ระบุ"></textarea>
+            </div>
+            <div class="d-flex gap-4">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="qmRequired" checked>
+                <label class="form-check-label fw-semibold" for="qmRequired">บังคับตอบ</label>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="qmActive" checked>
+                <label class="form-check-label fw-semibold" for="qmActive">เปิดใช้งาน</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึกคำถาม</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Template Picker -->
+  <div class="modal fade" id="templateModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold"><i class="bi bi-clipboard2-plus text-primary me-2"></i>เลือกชุดคำถามแม่แบบ (Template)</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="list-group mb-3">
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="volunteer" checked>
+              <div>
+                <div class="fw-bold">1. แบบประเมินกิจกรรมค่ายพัฒนาคุณธรรม จริยธรรม และจิตอาสา</div>
+                <small class="text-muted">สถานภาพ, เพศ, สถานที่, วันและเวลา, อาหารว่าง, วิทยากร, กิจกรรมธรรมะ, สายธารสู่ชุมชน, big cleaning, ทักษะที่ได้รับ, ความพึงพอใจ, ข้อเสนอแนะ (12 ข้อ)</small>
+              </div>
+            </label>
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="openhouse">
+              <div>
+                <div class="fw-bold">2. แบบประเมินนิทรรศการ เปิดบ้านสานฝัน (Open House)</div>
+                <small class="text-muted">อีเมล, ตัวอย่างเกียรติบัตร, ชื่อ-สกุล, เพศ, สถานะ, ด้านสถานที่/กิจกรรม/วิชาการ (16 รายการ 3 ส่วน)</small>
+              </div>
+            </label>
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="camp">
+              <div>
+                <div class="fw-bold">3. แบบประเมินค่าย / อบรม / สัมมนา</div>
+                <small class="text-muted">เพศ, สถานะ, ด้านการจัดกิจกรรม, สถานที่, วิทยากร, ข้อเสนอแนะ (10 ข้อ)</small>
+              </div>
+            </label>
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="project">
+              <div>
+                <div class="fw-bold">3. แบบประเมินโครงการสถานศึกษา</div>
+                <small class="text-muted">สถานภาพ, ด้านการวางแผน, ด้านการดำเนินงาน, ด้านประสิทธิผล (9 ข้อ)</small>
+              </div>
+            </label>
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="teaching">
+              <div>
+                <div class="fw-bold">4. แบบประเมินการจัดการเรียนการสอน</div>
+                <small class="text-muted">ระดับชั้น, การเข้าเรียน, การสอน, สื่อและวัดผล, บรรยากาศ (9 ข้อ)</small>
+              </div>
+            </label>
+            <label class="list-group-item d-flex gap-3 align-items-start cursor-pointer">
+              <input class="form-check-input flex-shrink-0" type="radio" name="tplPick" value="service">
+              <div>
+                <div class="fw-bold">5. แบบประเมินความพึงพอใจการให้บริการ</div>
+                <small class="text-muted">ประเภทผู้รับบริการ, ช่องทาง, บุคลากร, กระบวนงานและสถานที่ (7 ข้อ)</small>
+              </div>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="tplReplaceExisting" checked>
+            <label class="form-check-label text-danger fw-semibold" for="tplReplaceExisting">
+              แทนที่คำถามเดิมทั้งหมดของฟอร์มนี้ (หากไม่ติ๊ก จะเพิ่มต่อท้าย)
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" onclick="applySelectedTemplate()">นำเข้าชุดคำถาม</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Share Link & QR -->
+  <div class="modal fade" id="shareModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold"><i class="bi bi-share-fill text-primary me-2"></i>แชร์แบบประเมิน & QR Code</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="fw-bold mb-2" id="shareFormName">-</div>
+          <div id="qrcodeBox" class="d-inline-block p-3 bg-white border rounded-3 mb-3"></div>
+          <div class="input-group mb-2">
+            <input type="text" id="shareUrlInput" class="form-control form-control-sm" readonly>
+            <button class="btn btn-primary btn-sm" onclick="copyShareUrl()"><i class="bi bi-clipboard me-1"></i> คัดลอก</button>
+          </div>
+          <small class="text-muted d-block">ทุกคนสามารถสแกน QR Code หรือเปิดลิงก์นี้เพื่อเข้าทำแบบประเมินได้ทันทีโดยไม่ต้องลงชื่อเข้าใช้ (ไม่ต้องล็อกอิน)</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: System Config -->
+  <div class="modal fade" id="sysConfigModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 border-0 shadow">
+        <div class="modal-header">
+          <h6 class="modal-title fw-bold"><i class="bi bi-gear-fill text-primary me-2"></i>ตั้งค่าระบบ</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form onsubmit="saveSysConfigSubmit(event)">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label fw-semibold">ชื่อระบบ</label>
+              <input type="text" id="cfgSystemTitle" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-semibold">ชื่อโรงเรียน / หน่วยงาน</label>
+              <input type="text" id="cfgSchoolName" class="form-control" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label fw-semibold">เปลี่ยนรหัสผ่านผู้ดูแลใหม่ (เว้นว่างหากไม่เปลี่ยน)</label>
+              <input type="password" id="cfgNewPasscode" class="form-control" minlength="4" placeholder="อย่างน้อย 4 ตัวอักษร">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">ปิด</button>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">บันทึกการตั้งค่า</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <script>
+    const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzeN6VEGmCFjaUwebNCiDnP1iJSWhVf7W65J0WLeiascCVlKHFeH8J3-KzSDcFenSU5rg/exec";
+    const INITIAL_FORM_ID = new URLSearchParams(window.location.search).get("formId") || "";
+
+    const state = {
+      config: {},
+      assets: {},
+      forms: [],
+      activeFormId: "",
+      questions: [],
+      webAppUrl: "",
+      currentTab: "form",
+      gfPage: 1,
+      adminPasscode: "",
+      isAdmin: false,
+      dashRaw: null,
+      dashFilters: {},
+      charts: {
+        demos: [],
+        scaleBar: null
+      },
+      answers: {}
+    };
+
+    const CHART_PALETTE = [
+      "#2563eb", "#7c3aed", "#10b981", "#f59e0b", "#ec4899", "#06b6d4", "#f97316", "#64748b"
+    ];
+
+    function escapeHtml(str) {
+      return String(str === undefined || str === null ? "" : str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function showLoading(msg) {
+      document.getElementById("loadingText").textContent = msg || "กำลังดำเนินการ...";
+      document.getElementById("loadingOverlay").style.display = "flex";
+    }
+
+    function hideLoading() {
+      document.getElementById("loadingOverlay").style.display = "none";
+    }
+
+    function toastSuccess(msg) {
+      Swal.fire({ toast: true, position: "top-end", icon: "success", title: msg, showConfirmButton: false, timer: 2500 });
+    }
+
+    function toastError(msg) {
+      Swal.fire({ icon: "error", title: "เกิดข้อผิดพลาด", text: msg, confirmButtonText: "ตกลง" });
+    }
+
+    async function runGas(fnName, ...args) {
+      if (typeof google !== "undefined" && google.script && google.script.run) {
+        return new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(err => reject(err && err.message ? err.message : String(err)))
+            [fnName](...args);
+        });
+      }
+      const resp = await fetch(GAS_API_URL, {
+        method: "POST",
+        credentials: "omit",
+        redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ fn: fnName, args: args })
+      });
+      if (!resp.ok) {
+        throw new Error("เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ (HTTP " + resp.status + ")");
+      }
+      const payload = await resp.json();
+      if (payload && payload.__apiError) {
+        throw new Error(payload.message || "เกิดข้อผิดพลาดจากเซิร์ฟเวอร์");
+      }
+      return payload && payload.__apiOk ? payload.data : payload;
+    }
+
+    // ======================== INITIALIZATION ========================
+
+    window.addEventListener("DOMContentLoaded", () => {
+      initApp(INITIAL_FORM_ID);
+    });
+
+    async function initApp(requestedFormId) {
+      showLoading("กำลังเชื่อมต่อระบบประเมิน...");
+      try {
+        const res = await runGas("getInitialAppData", requestedFormId || "");
+        state.config = res.config || {};
+        state.assets = res.assets || {};
+        state.forms = res.forms || [];
+        state.activeFormId = res.activeFormId || "";
+        state.questions = res.questions || [];
+        const pageBaseUrl = window.location.href.split("?")[0].split("#")[0];
+        state.webAppUrl = (window.location.protocol === "http:" || window.location.protocol === "https:")
+          ? pageBaseUrl
+          : (res.webAppUrl || pageBaseUrl);
+        state.gfPage = 1;
+
+        document.getElementById("sysTitleHeader").textContent = state.config.system_title || "ระบบประเมินความพึงพอใจ";
+        document.getElementById("sysSchoolHeader").textContent = state.config.school_name || "";
+        if (state.config.school_logo) {
+          document.getElementById("sysLogoBox").innerHTML = `<img src="${escapeHtml(state.config.school_logo)}" alt="โลโก้โรงเรียน" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`;
+        }
+
+        renderGlobalFormDropdown();
+        renderPublicForm();
+        if (state.currentTab === "dash") await loadDashboard();
+        if (state.currentTab === "mgr" && state.isAdmin) renderQuestionManager();
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function renderGlobalFormDropdown() {
+      const sel = document.getElementById("globalFormSelect");
+      const defId = state.config.default_form_id || (state.forms[0] ? state.forms[0].formId : "");
+      sel.innerHTML = state.forms.map(f =>
+        `<option value="${escapeHtml(f.formId)}" ${f.formId === state.activeFormId ? "selected" : ""}>${escapeHtml(f.title)}${f.formId === defId ? " ★" : ""}</option>`
+      ).join("");
+    }
+
+    async function onGlobalFormChange(newFormId) {
+      state.activeFormId = newFormId;
+      state.answers = {};
+      state.dashFilters = {};
+      await initApp(newFormId);
+    }
+
+    function getActiveForm() {
+      return state.forms.find(f => f.formId === state.activeFormId) || state.forms[0] || null;
+    }
+
+    // ======================== NAVIGATION TABS ========================
+
+    async function switchTab(tabName) {
+      if (tabName === "mgr" && !state.isAdmin) {
+        document.getElementById("adminPasscodeInput").value = "";
+        document.getElementById("adminAuthError").classList.add("d-none");
+        new bootstrap.Modal(document.getElementById("adminAuthModal")).show();
+        setTimeout(() => document.getElementById("adminPasscodeInput").focus(), 300);
+        return;
+      }
+
+      state.currentTab = tabName;
+      document.getElementById("viewForm").classList.toggle("d-none", tabName !== "form");
+      document.getElementById("viewDash").classList.toggle("d-none", tabName !== "dash");
+      document.getElementById("viewMgr").classList.toggle("d-none", tabName !== "mgr");
+
+      const btnF = document.getElementById("tabBtnForm");
+      const btnD = document.getElementById("tabBtnDash");
+      const btnM = document.getElementById("tabBtnMgr");
+
+      btnF.className = "module-pill" + (tabName === "form" ? " active-form" : "");
+      btnD.className = "module-pill" + (tabName === "dash" ? " active-dash" : "");
+      btnM.className = "module-pill" + (tabName === "mgr" ? " active-mgr" : "");
+
+      updatePageBgTheme();
+      if (tabName === "form") renderPublicForm();
+      if (tabName === "dash") await loadDashboard();
+      if (tabName === "mgr") renderQuestionManager();
+    }
+
+    function updatePageBgTheme() {
+      // Keep one unified clean background across all forms and tabs
+      document.body.classList.remove("gf-bg-mode");
+    }
+
+    async function submitAdminPasscode(e) {
+      e.preventDefault();
+      const input = document.getElementById("adminPasscodeInput").value.trim();
+      const errBox = document.getElementById("adminAuthError");
+      showLoading("กำลังตรวจสอบรหัสผ่าน...");
+      try {
+        const res = await runGas("verifyAdminPasscodeServer", input);
+        if (res.success) {
+          state.adminPasscode = input;
+          state.isAdmin = true;
+          document.getElementById("mgrLockIcon").className = "bi bi-unlock-fill ms-1 small";
+          bootstrap.Modal.getInstance(document.getElementById("adminAuthModal")).hide();
+          toastSuccess("เข้าสู่โหมดจัดการคำถามแล้ว");
+          switchTab("mgr");
+        } else {
+          errBox.textContent = res.message || "รหัสผ่านไม่ถูกต้อง";
+          errBox.classList.remove("d-none");
+        }
+      } catch (err) {
+        errBox.textContent = err;
+        errBox.classList.remove("d-none");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function lockAdmin() {
+      state.isAdmin = false;
+      state.adminPasscode = "";
+      document.getElementById("mgrLockIcon").className = "bi bi-lock-fill ms-1 small";
+      switchTab("form");
+      toastSuccess("ล็อกสิทธิ์ผู้ดูแลเรียบร้อย");
+    }
+
+    // ======================== TAB 1: PUBLIC EVALUATION FORM ========================
+
+    function renderPublicForm() {
+      const form = getActiveForm();
+      if (!form) return;
+
+      updatePageBgTheme();
+      const isOpen = form.status === "OPEN";
+      const activeQuestions = state.questions.filter(q => q.active);
+
+      // Determine pages (single-page or multi-section)
+      const pagesSet = new Set();
+      activeQuestions.forEach(q => pagesSet.add((q.meta && q.meta.page) ? Number(q.meta.page) : 1));
+      const pages = Array.from(pagesSet).sort((a, b) => a - b);
+      if (pages.length === 0) pages.push(1);
+      if (!pages.includes(state.gfPage)) state.gfPage = pages[0];
+      const isMultiPage = pages.length > 1;
+      const curPageIdx = pages.indexOf(state.gfPage);
+      const visibleQuestions = isMultiPage
+        ? activeQuestions.filter(q => ((q.meta && q.meta.page) ? Number(q.meta.page) : 1) === state.gfPage)
+        : activeQuestions;
+
+      // Always use the unified Modern Hero Card (plus optional top banner image if configured)
+      document.getElementById("modernHeroCard").classList.remove("d-none");
+      document.getElementById("formClosedBanner").classList.toggle("d-none", isOpen);
+      document.getElementById("evaluationForm").classList.remove("d-none");
+      document.getElementById("formSuccessCard").classList.add("d-none");
+
+      const heroCard = document.getElementById("modernHeroCard");
+      const bannerKey = (form.theme && form.theme.bannerAsset) || "";
+      const bannerSrc = bannerKey ? (state.assets[bannerKey] || "") : "";
+      let existingBanner = document.getElementById("heroBannerWrap");
+      if (bannerSrc) {
+        if (!existingBanner) {
+          existingBanner = document.createElement("div");
+          existingBanner.id = "heroBannerWrap";
+          existingBanner.className = "mb-3 rounded-3 overflow-hidden shadow-sm bg-white";
+          heroCard.insertBefore(existingBanner, heroCard.firstChild);
+        }
+        existingBanner.innerHTML = `<img src="${escapeHtml(bannerSrc)}" alt="${escapeHtml(form.title)}" style="width:100%;max-height:200px;object-fit:cover;display:block;">`;
+        existingBanner.classList.remove("d-none");
+      } else if (existingBanner) {
+        existingBanner.classList.add("d-none");
+      }
+
+      document.getElementById("formHeroTitle").textContent = form.title;
+      document.getElementById("formHeroSubtitle").textContent = form.subtitle || "";
+      document.getElementById("formHeroDate").textContent = form.dateText || "-";
+      document.getElementById("formHeroLocation").textContent = form.location || "-";
+      document.getElementById("formHeroDateWrap").classList.toggle("d-none", !form.dateText);
+      document.getElementById("formHeroLocWrap").classList.toggle("d-none", !form.location);
+
+      const badge = document.getElementById("formStatusBadge");
+      badge.textContent = isOpen
+        ? (isMultiPage ? `เปิดรับคำตอบ • ส่วนที่ ${curPageIdx + 1}/${pages.length}` : "เปิดรับคำตอบ")
+        : "ปิดรับคำตอบ";
+      badge.className = "badge rounded-pill px-3 py-2 " + (isOpen ? "bg-success" : "bg-secondary");
+
+      // Group visible questions by category while preserving section instructions
+      const groups = [];
+      const groupMap = {};
+      visibleQuestions.forEach(q => {
+        const cat = q.category || "ทั่วไป";
+        if (!groupMap[cat]) {
+          groupMap[cat] = {
+            category: cat,
+            sectionTitle: (q.meta && q.meta.sectionTitle) || "",
+            sectionDesc: (q.meta && q.meta.sectionDesc) || "",
+            items: []
+          };
+          groups.push(groupMap[cat]);
+        }
+        if (q.meta && q.meta.sectionTitle && !groupMap[cat].sectionTitle) {
+          groupMap[cat].sectionTitle = q.meta.sectionTitle;
+          groupMap[cat].sectionDesc = q.meta.sectionDesc || "";
+        }
+        groupMap[cat].items.push(q);
+      });
+
+      const defaultScaleLabels = [
+        { val: 5, text: "มากที่สุด" },
+        { val: 4, text: "มาก" },
+        { val: 3, text: "ปานกลาง" },
+        { val: 2, text: "น้อย" },
+        { val: 1, text: "น้อยที่สุด" }
+      ];
+
+      let html = "";
+
+      groups.forEach((grp, gIdx) => {
+        let bodyHtml = "";
+        grp.items.forEach((q, qIdx) => {
+          const reqStar = q.required ? `<span class="text-danger ms-1">*</span>` : "";
+          const curVal = state.answers[q.questionId];
+
+          if (q.type === "radio") {
+            const tiles = (q.options || []).map(opt => {
+              const selected = curVal === opt ? "selected" : "";
+              return `
+                <div class="choice-tile ${selected}" data-qid="${escapeHtml(q.questionId)}" data-val="${escapeHtml(opt)}" onclick="selectRadioAnswer(this)">
+                  <i class="bi ${selected ? "bi-record-circle-fill text-primary" : "bi-circle text-muted"}"></i>
+                  <span>${escapeHtml(opt)}</span>
+                </div>`;
+            }).join("");
+            bodyHtml += `
+              <div class="mb-3">
+                <label class="fw-bold mb-2 d-block">${escapeHtml(q.text)}${reqStar}</label>
+                <div class="choice-grid" data-qid="${escapeHtml(q.questionId)}">${tiles}</div>
+              </div>`;
+          } else if (q.type === "select") {
+            const optsHtml = [`<option value="">-- กรุณาเลือก --</option>`].concat(
+              (q.options || []).map(opt => `<option value="${escapeHtml(opt)}" ${curVal === opt ? "selected" : ""}>${escapeHtml(opt)}</option>`)
+            ).join("");
+            bodyHtml += `
+              <div class="mb-3">
+                <label class="fw-bold mb-2 d-block">${escapeHtml(q.text)}${reqStar}</label>
+                <select class="form-select rounded-3" data-qid="${escapeHtml(q.questionId)}" onchange="state.answers[this.dataset.qid]=this.value">${optsHtml}</select>
+              </div>`;
+          } else if (q.type === "checkbox") {
+            const arrVal = Array.isArray(curVal) ? curVal : [];
+            const tiles = (q.options || []).map(opt => {
+              const selected = arrVal.includes(opt) ? "selected" : "";
+              return `
+                <div class="choice-tile ${selected}" data-qid="${escapeHtml(q.questionId)}" data-val="${escapeHtml(opt)}" onclick="toggleCheckboxAnswer(this)">
+                  <i class="bi ${selected ? "bi-check-square-fill text-primary" : "bi-square text-muted"}"></i>
+                  <span>${escapeHtml(opt)}</span>
+                </div>`;
+            }).join("");
+            bodyHtml += `
+              <div class="mb-3">
+                <label class="fw-bold mb-2 d-block">${escapeHtml(q.text)}${reqStar} <small class="text-muted fw-normal">(เลือกได้หลายข้อ)</small></label>
+                <div class="choice-grid" data-qid="${escapeHtml(q.questionId)}">${tiles}</div>
+              </div>`;
+          } else if (q.type === "scale5") {
+            const maxL = (q.meta && q.meta.scaleMaxLabel) || "มากที่สุด";
+            const minL = (q.meta && q.meta.scaleMinLabel) || "น้อยที่สุด";
+            const customLabels = maxL === "ดีมาก"
+              ? [
+                  { val: 5, text: "ดีมาก" },
+                  { val: 4, text: "ดี" },
+                  { val: 3, text: "ปานกลาง" },
+                  { val: 2, text: "น้อย" },
+                  { val: 1, text: minL || "ควรปรับปรุง" }
+                ]
+              : defaultScaleLabels;
+            const btns = customLabels.map(s => {
+              const selected = Number(curVal) === s.val ? "selected" : "";
+              return `
+                <button type="button" class="scale-btn ${selected}" onclick="selectScaleAnswer('${escapeHtml(q.questionId)}', ${s.val}, this)">
+                  <span class="score-num">${s.val}</span>
+                  <span class="score-lbl">${escapeHtml(s.text)}</span>
+                </button>`;
+            }).join("");
+            bodyHtml += `
+              <div class="scale-row" data-qid="${escapeHtml(q.questionId)}">
+                <div class="fw-semibold">${qIdx + 1}. ${escapeHtml(q.text)}${reqStar}</div>
+                <div class="scale-options">${btns}</div>
+              </div>`;
+          } else if (q.type === "email" || q.type === "shorttext") {
+            const ph = (q.meta && q.meta.placeholder) || (q.type === "email" ? "example@smschool.ac.th" : "พิมพ์คำตอบของคุณ...");
+            bodyHtml += `
+              <div class="mb-3">
+                <label class="fw-bold mb-2 d-block">${escapeHtml(q.text)}${reqStar}</label>
+                <input type="${q.type === "email" ? "email" : "text"}" class="form-control rounded-3" placeholder="${escapeHtml(ph)}"
+                  data-qid="${escapeHtml(q.questionId)}" value="${escapeHtml(curVal || "")}" oninput="state.answers[this.dataset.qid]=this.value">
+              </div>`;
+          } else if (q.type === "image") {
+            const assetKey = (q.meta && q.meta.imageAsset) || "";
+            const imgSrc = state.assets[assetKey] || "";
+            if (imgSrc) {
+              bodyHtml += `
+                <div class="mb-2 text-center">
+                  <img src="${escapeHtml(imgSrc)}" class="img-fluid rounded-3 border shadow-sm" style="max-height:420px;" alt="${escapeHtml(q.text)}">
+                </div>`;
+            }
+          } else if (q.type === "text") {
+            bodyHtml += `
+              <div class="mb-2">
+                <label class="fw-bold mb-2 d-block">${escapeHtml(q.text)}${reqStar}</label>
+                <textarea class="form-control rounded-3" rows="3" placeholder="พิมพ์ความคิดเห็นหรือข้อเสนอแนะของคุณที่นี่..."
+                  data-qid="${escapeHtml(q.questionId)}" oninput="state.answers[this.dataset.qid]=this.value">${escapeHtml(curVal || "")}</textarea>
+              </div>`;
+          }
+        });
+
+        const catTitle = grp.category.indexOf("ตอนที่") !== -1 ? grp.category : `ตอนที่ ${gIdx + 1} : ${grp.category}`;
+        html += `
+          <div class="section-card">
+            <div class="section-header-badge">
+              <span class="section-num-circle">${gIdx + 1}</span>
+              <h6 class="fw-bold mb-0 font-prompt">${escapeHtml(catTitle)}</h6>
+            </div>
+            ${grp.sectionDesc ? `
+              <div class="alert alert-light border border-primary border-opacity-25 rounded-3 mb-3 p-3 bg-primary bg-opacity-10">
+                <div class="fw-bold text-primary mb-1 small"><i class="bi bi-info-circle-fill me-2"></i>${escapeHtml(grp.sectionTitle || "คำชี้แจง")}</div>
+                <div class="small text-dark" style="white-space:pre-line;">${escapeHtml(grp.sectionDesc)}</div>
+              </div>` : ""}
+            ${bodyHtml}
+          </div>`;
+      });
+
+      if (activeQuestions.length === 0) {
+        html = `<div class="section-card text-center text-muted py-5">ยังไม่มีคำถามในแบบประเมินนี้ กรุณาเพิ่มคำถามในเมนู "จัดการคำถาม"</div>`;
+      }
+
+      document.getElementById("dynamicFormBody").innerHTML = html;
+
+      // Unified bottom navigation / submit controls
+      const submitWrap = document.getElementById("formSubmitWrap");
+      if (!isOpen || activeQuestions.length === 0) {
+        submitWrap.classList.add("d-none");
+      } else if (!isMultiPage) {
+        submitWrap.classList.remove("d-none");
+        submitWrap.className = "mt-4 d-grid";
+        submitWrap.innerHTML = `
+          <button id="btnSubmitEval" type="submit" class="btn btn-primary btn-lg rounded-4 py-3 fw-bold shadow" style="background: var(--primary-grad); border:none;">
+            <i class="bi bi-send-check-fill me-2"></i> ส่งแบบประเมินความพึงพอใจ
+          </button>`;
+      } else {
+        const isFirst = curPageIdx === 0;
+        const isLast = curPageIdx === pages.length - 1;
+        submitWrap.classList.remove("d-none");
+        submitWrap.className = "mt-4 d-flex flex-wrap align-items-center justify-content-between gap-2";
+        submitWrap.innerHTML = `
+          <div class="d-flex gap-2">
+            ${!isFirst ? `<button type="button" class="btn btn-outline-secondary btn-lg rounded-4 px-4 fw-semibold" onclick="gfChangePage(-1)"><i class="bi bi-arrow-left me-1"></i> ย้อนกลับ</button>` : ""}
+            ${!isLast
+              ? `<button type="button" class="btn btn-primary btn-lg rounded-4 px-4 fw-bold shadow" style="background: var(--primary-grad); border:none;" onclick="gfChangePage(1)">ถัดไป <i class="bi bi-arrow-right ms-1"></i></button>`
+              : `<button id="btnSubmitEval" type="submit" class="btn btn-primary btn-lg rounded-4 px-4 fw-bold shadow" style="background: var(--primary-grad); border:none;"><i class="bi bi-send-check-fill me-2"></i> ส่งแบบประเมินความพึงพอใจ</button>`}
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-light text-dark border rounded-pill px-3 py-2">ส่วนที่ ${curPageIdx + 1} / ${pages.length}</span>
+            <button type="button" class="btn btn-link text-decoration-none text-muted fw-semibold" onclick="gfConfirmClear()">ล้างคำตอบ</button>
+          </div>`;
+      }
+    }
+
+    function renderGoogleFormMode(form, isOpen) {
+      const activeQ = state.questions.filter(q => q.active);
+      const pagesSet = new Set();
+      activeQ.forEach(q => pagesSet.add((q.meta && q.meta.page) ? Number(q.meta.page) : 1));
+      const pages = Array.from(pagesSet).sort((a, b) => a - b);
+      if (pages.length === 0) pages.push(1);
+      if (!pages.includes(state.gfPage)) state.gfPage = pages[0];
+
+      const curPageIdx = pages.indexOf(state.gfPage);
+      const pageQuestions = activeQ.filter(q => ((q.meta && q.meta.page) ? Number(q.meta.page) : 1) === state.gfPage);
+
+      const bannerKey = (form.theme && form.theme.bannerAsset) || "openhouse_banner";
+      const bannerSrc = state.assets[bannerKey] || "";
+      const bannerHtml = bannerSrc
+        ? `<div class="gf-banner-card"><img src="${escapeHtml(bannerSrc)}" alt="${escapeHtml(form.title)}"></div>`
+        : "";
+
+      const descLines = [form.subtitle, form.location ? ("ณ " + form.location) : ""].filter(Boolean).join("\n");
+      const titleCardHtml = `
+        <div class="gf-title-card">
+          <div class="gf-title-text">${escapeHtml(form.title)}</div>
+          ${state.gfPage === 1 && descLines ? `<div class="gf-desc-text">${escapeHtml(descLines)}</div>` : ""}
+          <div class="gf-req-note">* ระบุว่าเป็นคำถามที่จำเป็น</div>
+        </div>`;
+
+      // Section header card for pages > 1
+      let sectionBannerHtml = "";
+      const secHeaderQ = pageQuestions.find(q => q.meta && q.meta.sectionTitle);
+      if (state.gfPage > 1 && secHeaderQ) {
+        sectionBannerHtml = `
+          <div class="gf-section-card">
+            <div class="gf-section-head">${escapeHtml(secHeaderQ.meta.sectionTitle)}</div>
+            ${secHeaderQ.meta.sectionDesc ? `<div class="gf-section-body">${escapeHtml(secHeaderQ.meta.sectionDesc)}</div>` : ""}
+          </div>`;
+      }
+
+      let itemsHtml = "";
+      let lastSubheading = "";
+
+      pageQuestions.forEach(q => {
+        const meta = q.meta || {};
+        if (meta.subheading && meta.subheading !== lastSubheading) {
+          lastSubheading = meta.subheading;
+          itemsHtml += `<div class="gf-subheading-card">${escapeHtml(meta.subheading)}</div>`;
+        }
+
+        const reqStar = q.required ? `<span class="text-danger ms-1">*</span>` : "";
+        const curVal = state.answers[q.questionId];
+
+        if (q.type === "email" || q.type === "shorttext") {
+          const ph = meta.placeholder || (q.type === "email" ? "อีเมลของคุณ" : "คำตอบของคุณ");
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <input type="${q.type === "email" ? "email" : "text"}" class="gf-underline-input ${q.type === "shorttext" ? "wide" : ""}"
+                placeholder="${escapeHtml(ph)}" data-qid="${escapeHtml(q.questionId)}"
+                value="${escapeHtml(curVal || "")}" oninput="state.answers[this.dataset.qid]=this.value">
+            </div>`;
+        } else if (q.type === "image") {
+          const imgSrc = state.assets[meta.imageAsset || ""] || "";
+          if (imgSrc) {
+            itemsHtml += `
+              <div class="gf-q-card text-center">
+                <img src="${escapeHtml(imgSrc)}" class="img-fluid rounded-2" alt="${escapeHtml(q.text)}" style="max-height:460px;">
+              </div>`;
+          }
+        } else if (q.type === "radio") {
+          const optsHtml = (q.options || []).map(opt => {
+            const sel = curVal === opt ? "selected" : "";
+            return `
+              <div class="gf-radio-opt ${sel}" data-qid="${escapeHtml(q.questionId)}" data-val="${escapeHtml(opt)}" onclick="gfSelectRadio(this)">
+                <span class="gf-radio-circle"></span>
+                <span>${escapeHtml(opt)}</span>
+              </div>`;
+          }).join("");
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <div class="gf-radio-list">${optsHtml}</div>
+            </div>`;
+        } else if (q.type === "select") {
+          const optsHtml = [`<option value="">เลือก</option>`].concat(
+            (q.options || []).map(opt => `<option value="${escapeHtml(opt)}" ${curVal === opt ? "selected" : ""}>${escapeHtml(opt)}</option>`)
+          ).join("");
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <select class="form-select" style="max-width:340px;border-color:#dadce0;" data-qid="${escapeHtml(q.questionId)}"
+                onchange="state.answers[this.dataset.qid]=this.value">${optsHtml}</select>
+            </div>`;
+        } else if (q.type === "checkbox") {
+          const arrVal = Array.isArray(curVal) ? curVal : [];
+          const tiles = (q.options || []).map(opt => {
+            const sel = arrVal.includes(opt) ? "selected" : "";
+            return `
+              <div class="choice-tile ${sel}" data-qid="${escapeHtml(q.questionId)}" data-val="${escapeHtml(opt)}" onclick="toggleCheckboxAnswer(this)">
+                <i class="bi ${sel ? "bi-check-square-fill text-success" : "bi-square text-muted"}"></i>
+                <span>${escapeHtml(opt)}</span>
+              </div>`;
+          }).join("");
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <div class="choice-grid">${tiles}</div>
+            </div>`;
+        } else if (q.type === "scale5") {
+          const minLbl = meta.scaleMinLabel || "ควรปรับปรุง";
+          const maxLbl = meta.scaleMaxLabel || "ดีมาก";
+          const colsHtml = [1, 2, 3, 4, 5].map(v => {
+            const sel = Number(curVal) === v ? "selected" : "";
+            return `
+              <div>
+                <div class="gf-scale-num">${v}</div>
+                <div class="gf-scale-dot ${sel}" data-qid="${escapeHtml(q.questionId)}" data-val="${v}" onclick="gfSelectScale(this)"></div>
+              </div>`;
+          }).join("");
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <div class="gf-scale-grid">
+                <div class="gf-scale-anchor" style="align-self:end;padding-bottom:2px;">${escapeHtml(minLbl)}</div>
+                ${colsHtml}
+                <div class="gf-scale-anchor" style="align-self:end;padding-bottom:2px;">${escapeHtml(maxLbl)}</div>
+              </div>
+            </div>`;
+        } else if (q.type === "text") {
+          itemsHtml += `
+            <div class="gf-q-card">
+              <div class="gf-q-title">${escapeHtml(q.text)}${reqStar}</div>
+              <textarea class="gf-underline-input wide" rows="2" placeholder="${escapeHtml(meta.placeholder || "คำตอบของคุณ")}"
+                data-qid="${escapeHtml(q.questionId)}" oninput="state.answers[this.dataset.qid]=this.value">${escapeHtml(curVal || "")}</textarea>
+            </div>`;
+        }
+      });
+
+      const isFirst = curPageIdx === 0;
+      const isLast = curPageIdx === pages.length - 1;
+      const navButtonsHtml = isOpen ? `
+        <div class="gf-nav-row">
+          <div class="d-flex gap-2">
+            ${!isFirst ? `<button type="button" class="gf-btn-nav" onclick="gfChangePage(-1)">กลับ</button>` : ""}
+            ${!isLast
+              ? `<button type="button" class="gf-btn-nav" onclick="gfChangePage(1)">ถัดไป</button>`
+              : `<button type="submit" class="gf-btn-submit">ส่ง</button>`}
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <span class="small text-muted">หน้า ${curPageIdx + 1} จาก ${pages.length}</span>
+            <button type="button" class="gf-btn-clear" onclick="gfConfirmClear()">ล้างแบบฟอร์ม</button>
+          </div>
+        </div>` : "";
+
+      document.getElementById("dynamicFormBody").innerHTML = `
+        <div class="gf-wrapper">
+          ${bannerHtml}
+          ${titleCardHtml}
+          ${sectionBannerHtml}
+          ${itemsHtml}
+          ${navButtonsHtml}
+        </div>`;
+    }
+
+    function gfSelectRadio(el) {
+      const qId = el.dataset.qid;
+      state.answers[qId] = el.dataset.val;
+      Array.from(el.parentElement.children).forEach(c => c.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    function gfSelectScale(el) {
+      const qId = el.dataset.qid;
+      const val = Number(el.dataset.val);
+      state.answers[qId] = val;
+      const grid = el.closest(".gf-scale-grid");
+      grid.querySelectorAll(".gf-scale-dot").forEach(d => d.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    function gfChangePage(delta) {
+      const activeQ = state.questions.filter(q => q.active);
+      const pagesSet = new Set();
+      activeQ.forEach(q => pagesSet.add((q.meta && q.meta.page) ? Number(q.meta.page) : 1));
+      const pages = Array.from(pagesSet).sort((a, b) => a - b);
+      const curIdx = pages.indexOf(state.gfPage);
+
+      if (delta > 0) {
+        const curQs = activeQ.filter(q => ((q.meta && q.meta.page) ? Number(q.meta.page) : 1) === state.gfPage);
+        for (const q of curQs) {
+          if (q.type === "image") continue;
+          const val = state.answers[q.questionId];
+          const empty = val === undefined || val === null || String(val).trim() === "" || (Array.isArray(val) && val.length === 0);
+          if (q.required && empty) {
+            toastError(`กรุณาตอบคำถามข้อ "${q.text}"`);
+            return;
+          }
+          if (q.type === "email" && !empty && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(val).trim())) {
+            toastError("กรุณาระบุรูปแบบอีเมลให้ถูกต้อง");
+            return;
+          }
+        }
+      }
+
+      const nextIdx = curIdx + delta;
+      if (nextIdx >= 0 && nextIdx < pages.length) {
+        state.gfPage = pages[nextIdx];
+        renderPublicForm();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    async function gfConfirmClear() {
+      const res = await Swal.fire({
+        icon: "question",
+        title: "ล้างแบบฟอร์ม?",
+        text: "คำตอบที่คุณกรอกไว้ทั้งหมดจะถูกล้าง",
+        showCancelButton: true,
+        confirmButtonText: "ล้างแบบฟอร์ม",
+        cancelButtonText: "ยกเลิก"
+      });
+      if (res.isConfirmed) {
+        state.answers = {};
+        state.gfPage = 1;
+        renderPublicForm();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function selectRadioAnswer(el) {
+      const qId = el.dataset.qid;
+      const value = el.dataset.val;
+      state.answers[qId] = value;
+      const parent = el.parentElement;
+      Array.from(parent.children).forEach(child => {
+        child.classList.remove("selected");
+        const icon = child.querySelector("i");
+        if (icon) icon.className = "bi bi-circle text-muted";
+      });
+      el.classList.add("selected");
+      const icon = el.querySelector("i");
+      if (icon) icon.className = "bi bi-record-circle-fill text-primary";
+    }
+
+    function toggleCheckboxAnswer(el) {
+      const qId = el.dataset.qid;
+      const value = el.dataset.val;
+      let arr = Array.isArray(state.answers[qId]) ? [...state.answers[qId]] : [];
+      const idx = arr.indexOf(value);
+      if (idx === -1) arr.push(value); else arr.splice(idx, 1);
+      state.answers[qId] = arr;
+      const isSelected = idx === -1;
+      el.classList.toggle("selected", isSelected);
+      const icon = el.querySelector("i");
+      if (icon) icon.className = isSelected ? "bi bi-check-square-fill text-primary" : "bi bi-square text-muted";
+    }
+
+    function selectScaleAnswer(qId, val, el) {
+      state.answers[qId] = val;
+      const parent = el.parentElement;
+      Array.from(parent.children).forEach(btn => btn.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const form = getActiveForm();
+      if (!form || form.status !== "OPEN") return;
+
+      const activeQ = state.questions.filter(q => q.active && q.type !== "image");
+      for (const q of activeQ) {
+        const val = state.answers[q.questionId];
+        const empty = val === undefined || val === null || String(val).trim() === "" || (Array.isArray(val) && val.length === 0);
+        if (q.required && empty) {
+          toastError(`กรุณาตอบคำถามข้อ "${q.text}"`);
+          return;
+        }
+        if (q.type === "email" && !empty && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(val).trim())) {
+          toastError("กรุณาระบุรูปแบบอีเมลให้ถูกต้อง");
+          return;
+        }
+      }
+
+      showLoading("กำลังบันทึกผลการประเมิน...");
+      try {
+        const res = await runGas("submitEvaluation", {
+          formId: form.formId,
+          answers: state.answers
+        });
+        if (res.success) {
+          document.getElementById("evaluationForm").classList.add("d-none");
+          document.getElementById("formSuccessCard").classList.remove("d-none");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          toastError(res.message || "ไม่สามารถบันทึกข้อมูลได้");
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function resetPublicForm() {
+      state.answers = {};
+      state.gfPage = 1;
+      renderPublicForm();
+    }
+
+    // ======================== TAB 2: DASHBOARD ========================
+
+    async function loadDashboard() {
+      const form = getActiveForm();
+      if (!form) return;
+      showLoading("กำลังประมวลผลข้อมูลสถิติ...");
+      try {
+        const res = await runGas("getDashboardData", form.formId);
+        if (!res.success) {
+          toastError(res.message || "โหลด Dashboard ไม่สำเร็จ");
+          return;
+        }
+        state.dashRaw = res;
+        document.getElementById("dashFormTitle").textContent = res.form.title;
+        renderDashFilters();
+        renderDashboardComputed();
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function renderDashFilters() {
+      const bar = document.getElementById("dashFilterBar");
+      const demoQs = (state.dashRaw.questions || []).filter(q => q.type === "radio" || q.type === "select");
+      if (demoQs.length === 0) {
+        bar.classList.add("d-none");
+        bar.innerHTML = "";
+        return;
+      }
+
+      let html = `<div class="col-auto small fw-bold text-muted"><i class="bi bi-funnel-fill me-1"></i>กรองข้อมูล:</div>`;
+      demoQs.forEach(q => {
+        const cur = state.dashFilters[q.questionId] || "ALL";
+        const opts = [`<option value="ALL">ทั้งหมด (${escapeHtml(q.text)})</option>`]
+          .concat((q.options || []).map(o => `<option value="${escapeHtml(o)}" ${cur === o ? "selected" : ""}>${escapeHtml(o)}</option>`))
+          .join("");
+        html += `
+          <div class="col-auto">
+            <select class="form-select form-select-sm rounded-pill" onchange="onDashFilterChange('${escapeHtml(q.questionId)}', this.value)">
+              ${opts}
+            </select>
+          </div>`;
+      });
+      html += `
+        <div class="col-auto">
+          <button class="btn btn-sm btn-link text-decoration-none" onclick="resetDashFilters()">ล้างตัวกรอง</button>
+        </div>`;
+
+      bar.innerHTML = html;
+      bar.classList.remove("d-none");
+    }
+
+    function onDashFilterChange(qId, val) {
+      if (val === "ALL") delete state.dashFilters[qId];
+      else state.dashFilters[qId] = val;
+      renderDashboardComputed();
+    }
+
+    function resetDashFilters() {
+      state.dashFilters = {};
+      renderDashFilters();
+      renderDashboardComputed();
+    }
+
+    function computeClientStats(questions, responses) {
+      const nTotal = responses.length;
+      const demoItems = [];
+      const scaleItems = [];
+      const textItems = [];
+      const catMap = {};
+      let allSum = 0, allSq = 0, allCnt = 0;
+
+      const calc = arr => {
+        if (!arr.length) return { mean: 0, sd: 0, cv: 0 };
+        const n = arr.length;
+        const s = arr.reduce((a, b) => a + b, 0);
+        const sq = arr.reduce((a, b) => a + b * b, 0);
+        const mean = s / n;
+        const sd = Math.sqrt(Math.max(0, (sq / n) - (mean * mean)));
+        const cv = mean > 0 ? (sd / mean) * 100 : 0;
+        return { mean, sd, cv };
+      };
+
+      const interpret = (m, cnt) => {
+        if (!cnt) return { label: "ไม่มีข้อมูล", cls: "level-3" };
+        if (m >= 4.50) return { label: "ดีมาก", cls: "level-5" };
+        if (m >= 3.50) return { label: "ดี", cls: "level-4" };
+        if (m >= 2.50) return { label: "ปานกลาง", cls: "level-3" };
+        if (m >= 1.50) return { label: "น้อย", cls: "level-2" };
+        return { label: "ปรับปรุง", cls: "level-1" };
+      };
+
+      questions.forEach(q => {
+        if (q.type === "scale5") {
+          const scores = [];
+          const dist = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+          responses.forEach(r => {
+            const v = Number(r.answers[q.questionId]);
+            if (v >= 1 && v <= 5) {
+              scores.push(v);
+              dist[v]++;
+              allSum += v;
+              allSq += v * v;
+              allCnt++;
+            }
+          });
+          const c = calc(scores);
+          const lv = interpret(c.mean, scores.length);
+          const item = {
+            questionId: q.questionId, text: q.text, category: q.category,
+            n: scores.length, mean: c.mean, sd: c.sd, cv: c.cv, level: lv.label, levelCls: lv.cls, dist
+          };
+          scaleItems.push(item);
+          if (!catMap[q.category]) catMap[q.category] = { category: q.category, scores: [], items: [] };
+          catMap[q.category].scores.push(...scores);
+          catMap[q.category].items.push(item);
+        } else if (q.type === "radio" || q.type === "checkbox" || q.type === "select") {
+          const counts = {};
+          (q.options || []).forEach(o => counts[o] = 0);
+          let itemN = 0;
+          responses.forEach(r => {
+            const val = r.answers[q.questionId];
+            if (val === undefined || val === null || val === "") return;
+            if (Array.isArray(val)) {
+              if (val.length) itemN++;
+              val.forEach(v => counts[v] = (counts[v] || 0) + 1);
+            } else {
+              itemN++;
+              counts[val] = (counts[val] || 0) + 1;
+            }
+          });
+          const breakdown = Object.keys(counts).map(lbl => ({
+            label: lbl,
+            count: counts[lbl],
+            pct: itemN > 0 ? Number(((counts[lbl] / itemN) * 100).toFixed(1)) : 0
+          }));
+          demoItems.push({ questionId: q.questionId, text: q.text, n: itemN, breakdown });
+        } else if (q.type === "text") {
+          const comments = [];
+          responses.forEach(r => {
+            const val = String(r.answers[q.questionId] || "").trim();
+            if (val) comments.push({ text: val, submittedAt: r.submittedAt });
+          });
+          textItems.push({ questionId: q.questionId, text: q.text, comments: comments.reverse() });
+        }
+      });
+
+      let overallMean = 0, overallSD = 0, overallCV = 0;
+      if (allCnt > 0) {
+        overallMean = allSum / allCnt;
+        overallSD = Math.sqrt(Math.max(0, (allSq / allCnt) - (overallMean * overallMean)));
+        overallCV = overallMean > 0 ? (overallSD / overallMean) * 100 : 0;
+      }
+
+      const categoryStats = Object.keys(catMap).map(cat => {
+        const c = calc(catMap[cat].scores);
+        const lv = interpret(c.mean, catMap[cat].scores.length);
+        return { category: cat, n: catMap[cat].scores.length, mean: c.mean, sd: c.sd, cv: c.cv, level: lv.label, levelCls: lv.cls, items: catMap[cat].items };
+      });
+
+      return {
+        totalResponses: nTotal,
+        overallMean, overallSD, overallCV,
+        overallLevel: interpret(overallMean, allCnt),
+        demoItems, scaleItems, categoryStats, textItems
+      };
+    }
+
+    function renderDashboardComputed() {
+      if (!state.dashRaw) return;
+      const questions = state.dashRaw.questions || [];
+      let responses = state.dashRaw.responses || [];
+      const totalAll = responses.length;
+
+      Object.keys(state.dashFilters).forEach(qId => {
+        const target = state.dashFilters[qId];
+        responses = responses.filter(r => {
+          const ans = r.answers[qId];
+          return Array.isArray(ans) ? ans.includes(target) : String(ans) === String(target);
+        });
+      });
+
+      const stats = computeClientStats(questions, responses);
+
+      // KPIs
+      document.getElementById("kpiTotal").textContent = stats.totalResponses;
+      document.getElementById("kpiTotalSub").textContent = `จากทั้งหมด ${totalAll} รายการ`;
+      document.getElementById("kpiMean").textContent = stats.overallMean.toFixed(2);
+      document.getElementById("kpiSD").textContent = stats.overallSD.toFixed(2);
+      document.getElementById("kpiLevel").textContent = stats.overallLevel.label;
+      document.getElementById("kpiCV").textContent = stats.overallCV.toFixed(1);
+      document.getElementById("kpiCVSub").textContent = stats.overallCV <= 20 ? "การกระจายต่ำ (ข้อมูลสอดคล้องดี)" : "การกระจายปานกลาง-สูง";
+
+      // Destroy old demo charts
+      state.charts.demos.forEach(c => c.destroy());
+      state.charts.demos = [];
+
+      // Render Demographics Donut Cards
+      const demoGrid = document.getElementById("dashDemoGrid");
+      if (stats.demoItems.length === 0) {
+        demoGrid.innerHTML = `<div class="col-12"><div class="dash-panel text-center text-muted">ยังไม่มีคำถามข้อมูลส่วนตัว (radio/checkbox)</div></div>`;
+      } else {
+        demoGrid.innerHTML = stats.demoItems.map((d, idx) => {
+          const legendRows = d.breakdown.map((b, bIdx) => `
+            <div class="d-flex align-items-center justify-content-between py-1 border-bottom border-light small">
+              <div class="d-flex align-items-center gap-2">
+                <span style="width:10px;height:10px;border-radius:3px;background:${CHART_PALETTE[bIdx % CHART_PALETTE.length]};display:inline-block;"></span>
+                <span>${escapeHtml(b.label)}</span>
+              </div>
+              <div class="fw-semibold text-dark">${b.count} <span class="text-muted fw-normal">(${b.pct.toFixed(1)}%)</span></div>
+            </div>`).join("");
+
+          return `
+            <div class="col-md-6">
+              <div class="dash-panel">
+                <div class="fw-bold mb-3">${escapeHtml(d.text)} <span class="text-muted fw-normal">(n=${d.n})</span></div>
+                <div class="row align-items-center g-3">
+                  <div class="col-5">
+                    <div style="position:relative;height:155px;">
+                      <canvas id="demoChart_${idx}"></canvas>
+                    </div>
+                  </div>
+                  <div class="col-7">${legendRows}</div>
+                </div>
+              </div>
+            </div>`;
+        }).join("");
+
+        stats.demoItems.forEach((d, idx) => {
+          const ctx = document.getElementById(`demoChart_${idx}`).getContext("2d");
+          const ch = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels: d.breakdown.map(b => b.label),
+              datasets: [{
+                data: d.breakdown.map(b => b.count),
+                backgroundColor: d.breakdown.map((_, i) => CHART_PALETTE[i % CHART_PALETTE.length]),
+                borderWidth: 2,
+                borderColor: "#ffffff"
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutout: "58%",
+              plugins: { legend: { display: false } }
+            }
+          });
+          state.charts.demos.push(ch);
+        });
+      }
+
+      // Render Scale Bar Chart
+      if (state.charts.scaleBar) state.charts.scaleBar.destroy();
+      const barCtx = document.getElementById("scaleBarChart").getContext("2d");
+      state.charts.scaleBar = new Chart(barCtx, {
+        type: "bar",
+        data: {
+          labels: stats.scaleItems.map((s, i) => `${i + 1}. ${s.text.length > 36 ? s.text.slice(0, 36) + "..." : s.text}`),
+          datasets: [{
+            label: "ค่าเฉลี่ย (เต็ม 5)",
+            data: stats.scaleItems.map(s => Number(s.mean.toFixed(2))),
+            backgroundColor: stats.scaleItems.map(s => s.mean >= 4.5 ? "#10b981" : (s.mean >= 3.5 ? "#3b82f6" : "#f59e0b")),
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { min: 0, max: 5, ticks: { stepSize: 1 } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Render Detailed Stat Table
+      let tbodyHtml = "";
+      let itemNo = 1;
+      stats.categoryStats.forEach(cat => {
+        tbodyHtml += `
+          <tr class="table-light fw-bold">
+            <td colspan="2">${escapeHtml(cat.category)}</td>
+            <td class="text-center">${stats.totalResponses}</td>
+            <td class="text-center text-primary">${cat.mean.toFixed(2)}</td>
+            <td class="text-center">${cat.sd.toFixed(2)}</td>
+            <td class="text-center">${cat.cv.toFixed(1)}%</td>
+            <td class="text-center"><span class="level-pill ${cat.levelCls}">${escapeHtml(cat.level)}</span></td>
+            <td></td>
+          </tr>`;
+        cat.items.forEach(item => {
+          const totalDist = item.n || 1;
+          const p5 = (item.dist[5] / totalDist) * 100;
+          const p4 = (item.dist[4] / totalDist) * 100;
+          const p3 = (item.dist[3] / totalDist) * 100;
+          const p2 = (item.dist[2] / totalDist) * 100;
+          const p1 = (item.dist[1] / totalDist) * 100;
+          tbodyHtml += `
+            <tr>
+              <td class="text-center">${itemNo++}</td>
+              <td>${escapeHtml(item.text)}</td>
+              <td class="text-center">${item.n}</td>
+              <td class="text-center fw-bold">${item.mean.toFixed(2)}</td>
+              <td class="text-center">${item.sd.toFixed(2)}</td>
+              <td class="text-center">${item.cv.toFixed(1)}%</td>
+              <td class="text-center"><span class="level-pill ${item.levelCls}">${escapeHtml(item.level)}</span></td>
+              <td>
+                <div class="progress" style="height: 10px;" title="5:${item.dist[5]} | 4:${item.dist[4]} | 3:${item.dist[3]} | 2:${item.dist[2]} | 1:${item.dist[1]}">
+                  <div class="progress-bar bg-success" style="width:${p5}%"></div>
+                  <div class="progress-bar bg-primary" style="width:${p4}%"></div>
+                  <div class="progress-bar bg-warning" style="width:${p3}%"></div>
+                  <div class="progress-bar" style="width:${p2}%;background:#f97316;"></div>
+                  <div class="progress-bar bg-danger" style="width:${p1}%"></div>
+                </div>
+                <div class="d-flex justify-content-between text-muted" style="font-size:0.72rem;">
+                  <span>5:${item.dist[5]}</span><span>4:${item.dist[4]}</span><span>3:${item.dist[3]}</span><span>≤2:${item.dist[2] + item.dist[1]}</span>
+                </div>
+              </td>
+            </tr>`;
+        });
+      });
+
+      if (stats.scaleItems.length === 0) {
+        tbodyHtml = `<tr><td colspan="8" class="text-center text-muted py-4">ยังไม่มีข้อมูลคำถามแบบมาตราส่วน 5 ระดับ</td></tr>`;
+      } else {
+        tbodyHtml += `
+          <tr class="table-primary fw-bold">
+            <td colspan="2" class="text-end">รวมค่าเฉลี่ยความพึงพอใจภาพรวม</td>
+            <td class="text-center">${stats.totalResponses}</td>
+            <td class="text-center">${stats.overallMean.toFixed(2)}</td>
+            <td class="text-center">${stats.overallSD.toFixed(2)}</td>
+            <td class="text-center">${stats.overallCV.toFixed(1)}%</td>
+            <td class="text-center"><span class="level-pill ${stats.overallLevel.cls}">${escapeHtml(stats.overallLevel.label)}</span></td>
+            <td></td>
+          </tr>`;
+      }
+      document.getElementById("dashStatTbody").innerHTML = tbodyHtml;
+
+      // Comments
+      const comments = [];
+      stats.textItems.forEach(t => t.comments.forEach(c => comments.push(c)));
+      const commBox = document.getElementById("dashCommentsList");
+      if (comments.length === 0) {
+        commBox.innerHTML = `<div class="text-muted text-center py-3">ยังไม่มีข้อเสนอแนะเพิ่มเติม</div>`;
+      } else {
+        commBox.innerHTML = comments.map((c, idx) => `
+          <div class="p-3 mb-2 rounded-3 bg-light border-start border-4 border-primary">
+            <div class="fw-semibold text-dark">${idx + 1}. ${escapeHtml(c.text)}</div>
+            <small class="text-muted"><i class="bi bi-clock me-1"></i>${escapeHtml(c.submittedAt)}</small>
+          </div>`).join("");
+      }
+    }
+
+    // ======================== EXPORTS (PDF & EXCEL) ========================
+
+    async function exportPdfServer() {
+      const form = getActiveForm();
+      if (!form) return;
+      showLoading("กำลังสร้างรายงาน PDF ภาษาไทย (TH Sarabun) และบันทึกลง Google Drive...");
+      try {
+        const res = await runGas("generatePDFReport", form.formId, state.dashFilters);
+        if (!res.success) {
+          toastError(res.message || "สร้าง PDF ไม่สำเร็จ");
+          return;
+        }
+        // Trigger browser download
+        const byteChars = atob(res.pdfBase64);
+        const byteNums = new Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) byteNums[i] = byteChars.charCodeAt(i);
+        const blob = new Blob([new Uint8Array(byteNums)], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = res.fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+        Swal.fire({
+          icon: "success",
+          title: "ส่งออก PDF สำเร็จ!",
+          html: res.fileUrl
+            ? `ดาวน์โหลดไฟล์ <b>${escapeHtml(res.fileName)}</b> และจัดเก็บในโฟลเดอร์ Google Drive แล้ว<br><a href="${escapeHtml(res.fileUrl)}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">เปิดไฟล์ใน Google Drive</a>`
+            : `ดาวน์โหลดไฟล์ <b>${escapeHtml(res.fileName)}</b> เรียบร้อย`,
+          confirmButtonText: "ตกลง"
+        });
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function exportExcelClient() {
+      if (!state.dashRaw) return;
+      const form = state.dashRaw.form;
+      const questions = state.dashRaw.questions || [];
+      let responses = state.dashRaw.responses || [];
+      Object.keys(state.dashFilters).forEach(qId => {
+        const target = state.dashFilters[qId];
+        responses = responses.filter(r => {
+          const ans = r.answers[qId];
+          return Array.isArray(ans) ? ans.includes(target) : String(ans) === String(target);
+        });
+      });
+      const stats = computeClientStats(questions, responses);
+
+      const wb = XLSX.utils.book_new();
+      // Sheet 1: Summary
+      const summaryData = [
+        ["รายงานสรุปผลการประเมินความพึงพอใจ", form.title],
+        ["ผู้จัด / หน่วยงาน", form.subtitle || "-"],
+        ["วันที่จัด / สถานที่", `${form.dateText || "-"} | ${form.location || "-"}`],
+        ["จำนวนผู้ตอบ (คน)", stats.totalResponses, "ค่าเฉลี่ยภาพรวม", Number(stats.overallMean.toFixed(2)), "S.D.", Number(stats.overallSD.toFixed(2)), "CV (%)", Number(stats.overallCV.toFixed(1)), "ระดับ", stats.overallLevel.label],
+        [],
+        ["ข้อ", "หมวดหมู่", "รายการประเมิน", "จำนวน (n)", "ค่าเฉลี่ย", "S.D.", "CV (%)", "ระดับความพึงพอใจ"]
+      ];
+      stats.scaleItems.forEach((item, idx) => {
+        summaryData.push([idx + 1, item.category, item.text, item.n, Number(item.mean.toFixed(2)), Number(item.sd.toFixed(2)), Number(item.cv.toFixed(1)), item.level]);
+      });
+      const ws1 = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, ws1, "สรุปผลสถิติ");
+
+      // Sheet 2: Raw Responses
+      const headers = ["รหัสตอบกลับ", "วัน-เวลาที่ส่ง"].concat(questions.map(q => q.text));
+      const rawData = [headers];
+      responses.forEach(r => {
+        const row = [r.responseId, r.submittedAt];
+        questions.forEach(q => {
+          const v = r.answers[q.questionId];
+          row.push(Array.isArray(v) ? v.join(", ") : (v !== undefined && v !== null ? v : ""));
+        });
+        rawData.push(row);
+      });
+      const ws2 = XLSX.utils.aoa_to_sheet(rawData);
+      XLSX.utils.book_append_sheet(wb, ws2, "ข้อมูลดิบรายบุคคล");
+
+      const safeName = (form.title || "evaluation").replace(/[\\/:*?"<>|]/g, "_");
+      XLSX.writeFile(wb, `สรุปผล_${safeName}.xlsx`);
+      toastSuccess("ส่งออกไฟล์ Excel เรียบร้อย");
+    }
+
+    // ======================== TAB 3: QUESTION MANAGER ========================
+
+    function renderQuestionManager() {
+      const form = getActiveForm();
+      if (!form) return;
+
+      document.getElementById("mgrFormTitle").textContent = form.title;
+      document.getElementById("mgrFormSubtitle").textContent = form.subtitle || "-";
+      document.getElementById("mgrFormDate").textContent = form.dateText || "-";
+      document.getElementById("mgrFormLocation").textContent = form.location || "-";
+      const stBadge = document.getElementById("mgrFormStatusBadge");
+      stBadge.textContent = form.status;
+      stBadge.className = "badge ms-1 " + (form.status === "OPEN" ? "bg-success" : "bg-secondary");
+
+      const defId = state.config.default_form_id || (state.forms[0] ? state.forms[0].formId : "");
+      const isDefault = form.formId === defId;
+      document.getElementById("mgrDefaultBadge").classList.toggle("d-none", !isDefault);
+      document.getElementById("btnSetDefaultForm").classList.toggle("d-none", isDefault);
+
+      const listEl = document.getElementById("mgrQuestionList");
+      if (state.questions.length === 0) {
+        listEl.innerHTML = `<div class="dash-panel text-center text-muted py-5">ยังไม่มีคำถาม กดปุ่ม <b>Template</b> หรือ <b>+ เพิ่มคำถาม</b> ด้านบนได้เลย</div>`;
+        return;
+      }
+
+      listEl.innerHTML = state.questions.map((q, idx) => `
+        <div class="q-manager-card ${q.active ? "" : "inactive"}">
+          <div class="reorder-col">
+            <button class="btn-order" onclick="moveQuestion(${idx}, -1)" ${idx === 0 ? "disabled" : ""} title="เลื่อนขึ้น"><i class="bi bi-caret-up-fill"></i></button>
+            <button class="btn-order" onclick="moveQuestion(${idx}, 1)" ${idx === state.questions.length - 1 ? "disabled" : ""} title="เลื่อนลง"><i class="bi bi-caret-down-fill"></i></button>
+          </div>
+          <div class="flex-grow-1 min-w-0">
+            <div class="fw-bold text-dark mb-1">${idx + 1}. ${escapeHtml(q.text)}</div>
+            <div class="d-flex flex-wrap gap-1 align-items-center">
+              <span class="badge badge-type">${escapeHtml(q.type)}</span>
+              <span class="badge ${q.required ? "badge-req" : "badge-opt"}">${q.required ? "บังคับ" : "ไม่บังคับ"}</span>
+              <span class="badge badge-cat">${escapeHtml(q.category)}</span>
+              ${q.options && q.options.length ? `<small class="text-muted ms-1">(${q.options.map(escapeHtml).join(", ")})</small>` : ""}
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <div class="form-check form-switch mb-0">
+              <input class="form-check-input" type="checkbox" ${q.active ? "checked" : ""} onchange="toggleQuestionActive('${escapeHtml(q.questionId)}', this.checked)" title="เปิด/ปิดใช้งาน">
+            </div>
+            <button class="btn btn-sm btn-outline-secondary rounded-3 px-2" onclick="openQuestionModal('${escapeHtml(q.questionId)}')">แก้</button>
+            <button class="btn btn-sm btn-outline-danger rounded-3 px-2" onclick="deleteQuestion('${escapeHtml(q.questionId)}')">ลบ</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function moveQuestion(idx, delta) {
+      const targetIdx = idx + delta;
+      if (targetIdx < 0 || targetIdx >= state.questions.length) return;
+      const arr = [...state.questions];
+      const temp = arr[idx];
+      arr[idx] = arr[targetIdx];
+      arr[targetIdx] = temp;
+      state.questions = arr;
+      renderQuestionManager();
+
+      try {
+        const res = await runGas("reorderQuestionsServer", state.adminPasscode, state.activeFormId, arr.map(q => q.questionId));
+        if (res.success) state.questions = res.questions;
+      } catch (err) {
+        toastError(err);
+      }
+    }
+
+    async function toggleQuestionActive(qId, checked) {
+      try {
+        const res = await runGas("toggleQuestionActiveServer", state.adminPasscode, state.activeFormId, qId, checked);
+        if (res.success) {
+          state.questions = res.questions;
+          renderQuestionManager();
+        }
+      } catch (err) {
+        toastError(err);
+      }
+    }
+
+    function openQuestionModal(qId) {
+      const q = qId ? state.questions.find(item => item.questionId === qId) : null;
+      document.getElementById("questionModalTitle").textContent = q ? "แก้ไขคำถาม" : "เพิ่มคำถามใหม่";
+      document.getElementById("qmId").value = q ? q.questionId : "";
+      document.getElementById("qmOrder").value = q ? q.order : "";
+      document.getElementById("qmText").value = q ? q.text : "";
+      document.getElementById("qmType").value = q ? q.type : "scale5";
+      document.getElementById("qmCategory").value = q ? q.category : "ความพึงพอใจ - ด้านการจัดกิจกรรม";
+      document.getElementById("qmOptions").value = q && q.options ? q.options.join("\n") : "";
+      document.getElementById("qmRequired").checked = q ? q.required : true;
+      document.getElementById("qmActive").checked = q ? q.active : true;
+      onQuestionTypeChange();
+      new bootstrap.Modal(document.getElementById("questionModal")).show();
+    }
+
+    function onQuestionTypeChange() {
+      const t = document.getElementById("qmType").value;
+      document.getElementById("qmOptionsWrap").classList.toggle("d-none", t !== "radio" && t !== "checkbox" && t !== "select");
+    }
+
+    async function saveQuestionSubmit(e) {
+      e.preventDefault();
+      const type = document.getElementById("qmType").value;
+      const rawOpts = document.getElementById("qmOptions").value.split("\n").map(s => s.trim()).filter(Boolean);
+      if ((type === "radio" || type === "checkbox" || type === "select") && rawOpts.length === 0) {
+        toastError("กรุณาระบุตัวเลือกอย่างน้อย 1 บรรทัด");
+        return;
+      }
+      const payload = {
+        questionId: document.getElementById("qmId").value,
+        formId: state.activeFormId,
+        order: Number(document.getElementById("qmOrder").value) || 0,
+        text: document.getElementById("qmText").value.trim(),
+        type: type,
+        category: document.getElementById("qmCategory").value.trim() || "ความพึงพอใจ",
+        options: rawOpts,
+        required: document.getElementById("qmRequired").checked,
+        active: document.getElementById("qmActive").checked
+      };
+
+      showLoading("กำลังบันทึกคำถาม...");
+      try {
+        const res = await runGas("saveQuestionServer", state.adminPasscode, payload);
+        if (res.success) {
+          state.questions = res.questions;
+          bootstrap.Modal.getInstance(document.getElementById("questionModal")).hide();
+          renderQuestionManager();
+          toastSuccess(res.message);
+        } else {
+          toastError(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function deleteQuestion(qId) {
+      const confirm = await Swal.fire({
+        icon: "warning",
+        title: "ยืนยันลบคำถาม?",
+        text: "คำถามนี้จะถูกลบออกจากแบบประเมิน",
+        showCancelButton: true,
+        confirmButtonText: "ลบคำถาม",
+        cancelButtonText: "ยกเลิก",
+        confirmButtonColor: "#dc2626"
+      });
+      if (!confirm.isConfirmed) return;
+
+      showLoading("กำลังลบคำถาม...");
+      try {
+        const res = await runGas("deleteQuestionServer", state.adminPasscode, state.activeFormId, qId);
+        if (res.success) {
+          state.questions = res.questions;
+          renderQuestionManager();
+          toastSuccess(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function openTemplateModal() {
+      new bootstrap.Modal(document.getElementById("templateModal")).show();
+    }
+
+    async function applySelectedTemplate() {
+      const picked = document.querySelector('input[name="tplPick"]:checked').value;
+      const replaceExisting = document.getElementById("tplReplaceExisting").checked;
+      showLoading("กำลังนำเข้าชุดคำถามแม่แบบ...");
+      try {
+        const res = await runGas("applyQuestionTemplateServer", state.adminPasscode, state.activeFormId, picked, replaceExisting);
+        if (res.success) {
+          state.questions = res.questions;
+          bootstrap.Modal.getInstance(document.getElementById("templateModal")).hide();
+          renderQuestionManager();
+          toastSuccess(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // ======================== FORM META & ADMIN TOOLS ========================
+
+    function openFormModal(isNew) {
+      const form = !isNew ? getActiveForm() : null;
+      document.getElementById("formMetaModalTitle").textContent = isNew ? "สร้างแบบประเมินใหม่" : "แก้ไขข้อมูลแบบประเมิน";
+      document.getElementById("fmFormId").value = form ? form.formId : "";
+      document.getElementById("fmTitle").value = form ? form.title : "";
+      document.getElementById("fmSubtitle").value = form ? form.subtitle : `จัดโดย ${state.config.school_name || ""}`;
+      document.getElementById("fmDateText").value = form ? form.dateText : "";
+      document.getElementById("fmLocation").value = form ? form.location : (state.config.school_name || "");
+      document.getElementById("fmStatus").value = form ? form.status : "OPEN";
+      document.getElementById("fmStyle").value = (form && form.theme && form.theme.style) ? form.theme.style : "modern";
+      document.getElementById("fmTemplateWrap").classList.toggle("d-none", !isNew);
+      new bootstrap.Modal(document.getElementById("formMetaModal")).show();
+    }
+
+    async function saveFormMetaSubmit(e) {
+      e.preventDefault();
+      const formId = document.getElementById("fmFormId").value;
+      const existing = formId ? getActiveForm() : null;
+      const styleVal = document.getElementById("fmStyle").value;
+      const tplVal = !formId ? document.getElementById("fmTemplateKey").value : "";
+      let primaryColor = "";
+      let sectionColor = "";
+      let pageBg = "";
+      let multiPage = false;
+      if (styleVal === "googleform" || tplVal === "openhouse" || tplVal === "volunteer") {
+        if (tplVal === "volunteer") {
+          primaryColor = "#5746e3";
+          sectionColor = "#4335b8";
+          pageBg = "#ede9fe";
+          multiPage = false;
+        } else {
+          primaryColor = "#008865";
+          sectionColor = "#399375";
+          pageBg = "#e1efea";
+          multiPage = true;
+        }
+      }
+      const themeObj = Object.assign({}, (existing && existing.theme) ? existing.theme : {}, {
+        style: styleVal,
+        primaryColor: primaryColor || (existing && existing.theme && existing.theme.primaryColor) || "",
+        sectionColor: sectionColor || (existing && existing.theme && existing.theme.sectionColor) || "",
+        pageBg: pageBg || (existing && existing.theme && existing.theme.pageBg) || "",
+        multiPage: multiPage
+      });
+      const payload = {
+        formId: formId,
+        title: document.getElementById("fmTitle").value.trim(),
+        subtitle: document.getElementById("fmSubtitle").value.trim(),
+        dateText: document.getElementById("fmDateText").value.trim(),
+        location: document.getElementById("fmLocation").value.trim(),
+        status: document.getElementById("fmStatus").value,
+        theme: themeObj,
+        templateKey: !formId ? document.getElementById("fmTemplateKey").value : ""
+      };
+      showLoading("กำลังบันทึกข้อมูลแบบประเมิน...");
+      try {
+        const res = await runGas("saveFormMeta", state.adminPasscode, payload);
+        if (res.success) {
+          bootstrap.Modal.getInstance(document.getElementById("formMetaModal")).hide();
+          await initApp(res.formId);
+          renderQuestionManager();
+          toastSuccess(res.message);
+        } else {
+          toastError(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function deleteCurrentForm() {
+      const form = getActiveForm();
+      if (!form) return;
+      const confirm = await Swal.fire({
+        icon: "warning",
+        title: `ลบแบบประเมิน "${form.title}"?`,
+        text: "คำถามและผลการประเมินทั้งหมดของฟอร์มนี้จะถูกลบถาวร",
+        showCancelButton: true,
+        confirmButtonText: "ยืนยันลบ",
+        cancelButtonText: "ยกเลิก",
+        confirmButtonColor: "#dc2626"
+      });
+      if (!confirm.isConfirmed) return;
+
+      showLoading("กำลังลบแบบประเมิน...");
+      try {
+        const res = await runGas("deleteFormServer", state.adminPasscode, form.formId);
+        if (res.success) {
+          await initApp(res.nextFormId);
+          renderQuestionManager();
+          toastSuccess(res.message);
+        } else {
+          toastError(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function setAsDefaultForm() {
+      const form = getActiveForm();
+      if (!form) return;
+      showLoading("กำลังตั้งค่าหน้าเริ่มต้น...");
+      try {
+        const res = await runGas("setDefaultFormServer", state.adminPasscode, form.formId);
+        if (res.success) {
+          state.config = res.config;
+          renderGlobalFormDropdown();
+          renderQuestionManager();
+          toastSuccess(res.message);
+        } else {
+          toastError(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function seedSampleData() {
+      showLoading("กำลังสร้างข้อมูลจำลอง 20 รายการ...");
+      try {
+        const res = await runGas("seedSampleResponsesServer", state.adminPasscode, state.activeFormId, 20);
+        if (res.success) toastSuccess(res.message);
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function clearResponses() {
+      const confirm = await Swal.fire({
+        icon: "warning",
+        title: "ล้างคำตอบทั้งหมดของฟอร์มนี้?",
+        text: "ใช้เมื่อต้องการเคลียร์ข้อมูลตัวอย่างก่อนเปิดใช้งานจริง",
+        showCancelButton: true,
+        confirmButtonText: "ล้างข้อมูล",
+        cancelButtonText: "ยกเลิก",
+        confirmButtonColor: "#dc2626"
+      });
+      if (!confirm.isConfirmed) return;
+
+      showLoading("กำลังล้างข้อมูลตอบกลับ...");
+      try {
+        const res = await runGas("clearFormResponsesServer", state.adminPasscode, state.activeFormId);
+        if (res.success) toastSuccess(res.message);
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    async function exportDriveSheet() {
+      showLoading("กำลังสร้าง Google Sheets สรุปผลลงในโฟลเดอร์ Drive...");
+      try {
+        const res = await runGas("exportResponsesToDriveSheet", state.adminPasscode, state.activeFormId);
+        if (res.success) {
+          Swal.fire({
+            icon: "success",
+            title: "ส่งออก Google Sheets สำเร็จ!",
+            html: `บันทึกไฟล์ <b>${escapeHtml(res.fileName)}</b> ลงในโฟลเดอร์ Google Drive แล้ว<br><a href="${escapeHtml(res.fileUrl)}" target="_blank" class="btn btn-sm btn-success mt-2">เปิด Google Sheets</a>`,
+            confirmButtonText: "ตกลง"
+          });
+        } else {
+          toastError(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    function openSysConfigModal() {
+      document.getElementById("cfgSystemTitle").value = state.config.system_title || "";
+      document.getElementById("cfgSchoolName").value = state.config.school_name || "";
+      document.getElementById("cfgNewPasscode").value = "";
+      new bootstrap.Modal(document.getElementById("sysConfigModal")).show();
+    }
+
+    async function saveSysConfigSubmit(e) {
+      e.preventDefault();
+      const newPass = document.getElementById("cfgNewPasscode").value.trim();
+      const payload = {
+        system_title: document.getElementById("cfgSystemTitle").value.trim(),
+        school_name: document.getElementById("cfgSchoolName").value.trim(),
+        new_passcode: newPass
+      };
+      showLoading("กำลังบันทึกการตั้งค่าระบบ...");
+      try {
+        const res = await runGas("updateSystemConfigServer", state.adminPasscode, payload);
+        if (res.success) {
+          state.config = res.config;
+          if (newPass) state.adminPasscode = newPass;
+          document.getElementById("sysTitleHeader").textContent = state.config.system_title;
+          document.getElementById("sysSchoolHeader").textContent = state.config.school_name;
+          bootstrap.Modal.getInstance(document.getElementById("sysConfigModal")).hide();
+          toastSuccess(res.message);
+        }
+      } catch (err) {
+        toastError(err);
+      } finally {
+        hideLoading();
+      }
+    }
+
+    // ======================== SHARE & QR CODE ========================
+
+    function openShareModal() {
+      const form = getActiveForm();
+      if (!form) return;
+      const base = state.webAppUrl || window.location.href.split("?")[0];
+      const shareUrl = `${base}?formId=${encodeURIComponent(form.formId)}`;
+
+      document.getElementById("shareFormName").textContent = form.title;
+      document.getElementById("shareUrlInput").value = shareUrl;
+      const qrBox = document.getElementById("qrcodeBox");
+      qrBox.innerHTML = "";
+      new QRCode(qrBox, { text: shareUrl, width: 180, height: 180, colorDark: "#1e3a8a", colorLight: "#ffffff" });
+
+      new bootstrap.Modal(document.getElementById("shareModal")).show();
+    }
+
+    function copyShareUrl() {
+      const inp = document.getElementById("shareUrlInput");
+      inp.select();
+      navigator.clipboard.writeText(inp.value).then(() => toastSuccess("คัดลอกลิงก์แล้ว"));
+    }
+  </script>
+</body>
+</html>
